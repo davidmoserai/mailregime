@@ -29,7 +29,7 @@ export const CA: CountryData = {
         "no general B2B exemption",
       ],
     },
-    consentLanguage: { required: ["en-CA"], mustMatchUserLocale: false },
+    consentLanguage: { required: [], mustMatchUserLocale: false },
     dataResidency: {
       storageRegion: "any",
       crossBorderTransferMechanism: "none-required",

@@ -29,6 +29,8 @@ export const DE: CountryData = {
         "UWG §7 case law generally requires consent even for B2B",
       ],
     },
+    // German required at point of collection — UWG §7 case law looks at
+    // whether the consent was understandable to the recipient.
     consentLanguage: { required: ["de-DE"], mustMatchUserLocale: true },
     dataResidency: {
       storageRegion: "any",

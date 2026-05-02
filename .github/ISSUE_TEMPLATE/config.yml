@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Read the disclaimer
+    url: https://github.com/davidmoserai/m24t/blob/main/DISCLAIMER.md
+    about: m24t is informational only, AI-assisted, not lawyer-reviewed, offline. Read this before filing.
+  - name: Read the collaboration guide
+    url: https://github.com/davidmoserai/m24t/blob/main/COLLABORATION.md
+    about: How to contribute legal corrections, bug reports, and country data.

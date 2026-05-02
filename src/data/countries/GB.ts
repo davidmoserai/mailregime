@@ -27,7 +27,7 @@ export const GB: CountryData = {
         "B2B corporate subscribers (companies, LLPs) have weaker PECR protections than sole traders / partnerships",
       ],
     },
-    consentLanguage: { required: ["en-GB"], mustMatchUserLocale: false },
+    consentLanguage: { required: [], mustMatchUserLocale: false },
     dataResidency: {
       storageRegion: "any",
       crossBorderTransferMechanism: "scc",

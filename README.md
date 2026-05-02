@@ -10,7 +10,15 @@ You give it where the user is, why you're collecting their email, and what your 
 
 ## ⚠️ READ FIRST — DISCLAIMER
 
-**This software is informational only. It is not legal advice.** It does not create an attorney–client relationship. The bundled data may be wrong, out of date, incomplete, or inapplicable to your facts. Use of m24t is entirely at your own risk. The maintainers carry **zero liability** for any consequence of your use, including regulatory fines, litigation, or business loss. You **must** retain qualified counsel for your specific use case. Full terms in [LICENSE](./LICENSE), [DISCLAIMER.md](./DISCLAIMER.md), [CONTRIBUTING.md](./CONTRIBUTING.md). **By using this software you agree to those terms.**
+**This software is informational only. It is not legal advice.** It does not create an attorney–client relationship. The bundled data may be wrong, out of date, incomplete, or inapplicable to your facts. Use of m24t is entirely at your own risk. The maintainers carry **zero liability** for any consequence of your use, including regulatory fines, litigation, or business loss. You **must** retain qualified counsel for your specific use case.
+
+**Three things you should know before installing:**
+
+1. **m24t was written largely with an AI coding assistant.** Bugs are expected. Pin a version, read diffs, verify outputs.
+2. **No lawyer reviews this software or its data.** The maintainers are not lawyers and do not retain lawyers to vet what ships. If you are an expert in privacy law and you spot a mistake, please [open an issue or a PR](./COLLABORATION.md) — that is how the data gets better.
+3. **m24t is offline.** It runs in your process, returns data, opens no network connections, stores nothing, transmits nothing. Inputs stay with you.
+
+Full terms in [LICENSE](./LICENSE), [DISCLAIMER.md](./DISCLAIMER.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [COLLABORATION.md](./COLLABORATION.md). **By using this software you agree to those terms.**
 
 ---
 
@@ -83,7 +91,7 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the full output shape, edge cases, and 
 - [x] Design doc
 - [x] Consent-storage doc
 - [x] Modularity contract
-- [x] Liability shields (LICENSE, DISCLAIMER, CONTRIBUTING)
+- [x] Liability shields (LICENSE, DISCLAIMER, CONTRIBUTING, SECURITY, COLLABORATION + GitHub issue/PR templates)
 - [x] Core API + types
 - [x] Seed data: US, GB, DE, CA (incl. Quebec), AU
 - [x] ISO/IEC TS 27560:2023 audit-record serializer

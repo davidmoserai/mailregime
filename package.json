@@ -55,6 +55,7 @@
     "build": "rm -rf dist && tsc",
     "test": "node --test --import tsx tests/*.test.ts",
     "typecheck": "tsc --noEmit",
+    "prepare": "tsc 2>/dev/null || true",
     "prepublishOnly": "npm run typecheck && npm run test && npm run build"
   },
   "keywords": [

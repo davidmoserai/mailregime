@@ -115,10 +115,11 @@ export function serializeISO27560(record: AuditRecord): Record<string, unknown> 
   }
 }
 
-// Right-to-erasure compatible redaction: keep proof-of-past-consent
-// (legitimate-interest basis, ICO/CNIL aligned) while removing direct
-// identifiers. Receipt remains valid evidence; subject is no longer
-// identifiable from it.
+// Designed to preserve evidentiary structure (consent ID, timestamp,
+// statute, withdrawal record) while removing direct identifiers. Whether
+// this satisfies right-to-erasure under any specific regime is the
+// caller's call — verify against your regulator's current guidance and
+// your own counsel.
 export function redactReceipt(record: AuditRecord): AuditRecord {
   return {
     ...record,

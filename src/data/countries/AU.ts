@@ -21,7 +21,7 @@ export const AU: CountryData = {
     requiresCallerSimilarityAssertion: false,
     impliedConsentTtlMonths: null,
     b2bExemption: { regime: "none", conditions: [] },
-    consentLanguage: { required: ["en-AU"], mustMatchUserLocale: false },
+    consentLanguage: { required: [], mustMatchUserLocale: false },
     dataResidency: {
       storageRegion: "any",
       crossBorderTransferMechanism: "none-required",

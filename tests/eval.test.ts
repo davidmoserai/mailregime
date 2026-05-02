@@ -90,7 +90,8 @@ test("evaluate — region override does NOT apply outside that region", () => {
     context: "newsletter-signup",
     relationship: "none",
   })
-  assert.deepEqual(rules.consentLanguage.required, ["en-CA"])
+  assert.deepEqual(rules.consentLanguage.required, [])
+  assert.equal(rules.consentLanguage.mustMatchUserLocale, false)
 })
 
 test("evaluate — merge order: defaults < context < relationship < region", () => {

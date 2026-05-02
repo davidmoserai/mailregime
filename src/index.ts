@@ -74,7 +74,7 @@ function emitDisclaimerOnce(): void {
   )
 }
 
-class UnknownCountryError extends Error {
+export class UnknownCountryError extends Error {
   constructor(country: string | null) {
     super(
       `m24t: country "${country ?? "null"}" is not registered. Either bundle it via registerCountry(), pass a known ISO 3166-1 alpha-2 code, or set unknownCountryPolicy to "strict" or "permissive" via configure().`,

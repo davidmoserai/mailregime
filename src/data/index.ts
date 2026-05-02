@@ -35,10 +35,6 @@ export function lookupCountry(code: string): CountryData | undefined {
   return bundled.get(upper)
 }
 
-export function clearRegistry(): void {
-  registry.clear()
-}
-
 // The `consentDataVersion` ships in this build of the package. Pinned
 // independently from the library SemVer (see docs/MODULARITY.md).
 export const CONSENT_DATA_VERSION = "2026-05-02"

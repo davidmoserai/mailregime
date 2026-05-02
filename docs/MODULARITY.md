@@ -69,7 +69,7 @@ Auto-update on minor library upgrades is opt-in (`consentDataVersion: "latest"`)
 
 ### data
 
-- **JSON, not code.** Per-country files in `m24t/data/countries/{ISO3166-1}.json`.
+- **Declarative, not logic.** Per-country files in `src/data/countries/{ISO3166-1}.ts` exporting a `CountryData` const. TypeScript over JSON for compile-time validation against the schema; data records contain no functions or behaviour.
 - **Tree-shakable per country.** Apps that operate in 5 markets ship 5 country files.
 - **Carries metadata per record:** `code`, `regime`, `subRegime`, `statute`, `url`, `dataLastUpdated`, `confidence`, `extraterritorialReach`, `lawyerAttestation`.
 - **Rolling reviews.** Each country has a `dataLastUpdated` date (when the maintainer last touched the file — NOT a lawyer-review date). Library logs a console warning in dev when a queried country's data is >12 months old.
@@ -90,17 +90,18 @@ Auto-update on minor library upgrades is opt-in (`consentDataVersion: "latest"`)
 - **No detection adapter is mandatory.** Apps can pass `{ country: "DE" }` directly.
 - Future detection sources (a Vercel-native integration, a header from a different CDN, a self-declared profile field) are **new adapter packages, not core changes**.
 
-### integrations (ESPs)
+### integrations (ESPs) — planned, not yet shipped
 
-- **Single contract per direction:**
-  ```ts
-  type EspBinding = {
-    routeForOptIn(rules: EmailRules, contact: Contact): EspApiCall
-    exportAuditTrail(date: Date): AsyncIterable<AuditRecord>
-  }
-  ```
-- Each ESP integration emits the right shape for that ESP (Brevo `/contacts/doi` vs `/contacts`; Mailchimp `double_optin` flag) **and** a portable AuditRecord export so the snapshot strategy in [CONSENT_STORAGE.md](./CONSENT_STORAGE.md) is one line.
-- **Adding a new ESP is a new package, not a core change.** Pattern is fixed; volume is open-ended.
+ESP integrations (Brevo, Resend, Mailchimp, Klaviyo) are planned but not yet implemented. The intended contract:
+
+```ts
+type EspBinding = {
+  routeForOptIn(rules: EmailRules, contact: Contact): EspApiCall
+  exportAuditTrail(date: Date): AsyncIterable<AuditRecord>
+}
+```
+
+Each ESP integration will emit the right shape for that ESP (Brevo `/contacts/doi` vs `/contacts`; Mailchimp `double_optin` flag) **and** a portable AuditRecord export so the snapshot strategy in [CONSENT_STORAGE.md](./CONSENT_STORAGE.md) is one line. **Adding a new ESP will be a new package, not a core change.** Pattern is fixed; volume is open-ended.
 
 ### audit
 

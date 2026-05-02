@@ -2,6 +2,23 @@
 
 > **Read this before you use, fork, modify, deploy, or rely on m24t in any way.**
 
+## How this software was built (read this first)
+
+- **m24t was written largely with the help of an AI coding assistant (Claude Code).** No claim is made that the code is bug-free, security-hardened, semantically correct, or fit for any purpose. AI-assisted code can contain subtle errors that look plausible but are wrong.
+- **No lawyer reviews this software or its data.** The maintainers are not lawyers and explicitly do not retain lawyers to vet the legal data shipped in this library. The country records, decision matrix, and audit-record schema are the maintainer's good-faith summary based on publicly available material. They may be wrong, out of date, or inapplicable to your facts.
+- **m24t is an offline library.** It runs entirely in your process, returns data structures, and opens no network connections. It does not call home, does not transmit telemetry, does not store anything anywhere. Inputs you pass in stay with you. The library is incapable of leaking your data because it doesn't touch any.
+- **Bugs are expected.** Pin a version, read the diff before upgrading, and verify outputs against your own counsel's guidance before relying on them in production.
+
+If any of those points is unacceptable to you, do not use this software.
+
+## How we try to keep the data current (and why we cannot promise to)
+
+The maintainers run periodic AI-assisted research routines (typically weekly) to scan for legal changes — new statutes, regulator guidance, court rulings, amendments, repeals — and incorporate findings into the country records. These routines are best-effort and may miss developments, mis-summarise them, or apply them incorrectly. They are run by an AI agent. They are not a substitute for a lawyer.
+
+**No promise of timeliness.** We do not promise the data is current, will become current, or will be updated on any schedule. Country records carry a `dataLastUpdated` field — that is a fact about the file, not a guarantee about the world. A field updated yesterday can be wrong. A field two years stale can be right. Always verify against your own counsel and your own primary-source reading before relying on any output.
+
+If you spot a change we missed, please [open an issue or PR](./COLLABORATION.md). That is the fastest path to fixing it.
+
 ## Plain English
 
 1. **m24t is not legal advice.** It is a developer convenience library that returns structured data based on inputs. It is not a substitute for a lawyer, a Data Protection Officer, a compliance officer, or any other professional.

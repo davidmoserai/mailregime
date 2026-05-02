@@ -156,15 +156,15 @@ Country alone isn't enough. `(country, context, relationship)` is the minimum vi
                 ▼                      ▼                      ▼
    ┌──────────────────────┐ ┌───────────────────┐ ┌──────────────────────┐
    │ m24t/data            │ │ m24t/adapters/*   │ │ m24t/integrations/*  │
-   │                      │ │                   │ │                      │
-   │ JSON files, one per  │ │ Detect country    │ │ ESP plug-ins:        │
-   │ jurisdiction. Tree-  │ │ from request:     │ │                      │
+   │                      │ │                   │ │ (planned)            │
+   │ TS files, one per    │ │ Detect country    │ │                      │
+   │ jurisdiction. Tree-  │ │ from request:     │ │ ESP plug-ins:        │
    │ shakable. Each       │ │   • vercel        │ │   • brevo            │
    │ record carries:      │ │   • cloudflare    │ │   • mailchimp        │
    │   code, regime,      │ │   • header        │ │   • klaviyo          │
-   │   subRegime, statute,│ │   • maxmind       │ │   • resend           │
-   │   url, dataLastUpd., │ │   • static        │ │                      │
-   │   confidence         │ │     (testing)     │ │ Each emits the right │
+   │   subRegime, statute,│ │   • static        │ │   • resend           │
+   │   url, dataLastUpd., │ │   • maxmind       │ │                      │
+   │   confidence         │ │     (planned)     │ │ Each emits the right │
    │                      │ │                   │ │ shape for that ESP   │
    │ Versioned separately │ │                   │ │ AND a portable       │
    │ from library SemVer  │ │                   │ │ AuditRecord export.  │
