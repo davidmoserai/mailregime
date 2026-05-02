@@ -94,7 +94,7 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the full output shape, edge cases, and 
 - [ ] Seed data: FR, BR, IN, JP (next batch)
 - [ ] Brevo integration
 - [ ] Resend integration
-- [ ] v0.1 publish to npm (gated on disclaimer review)
+- [ ] v0.1 publish to npm
 
 ## Contributing
 
