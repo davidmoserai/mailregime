@@ -8,7 +8,11 @@ You give it where the user is, why you're collecting their email, and what your 
 
 ## Status
 
-🚧 **Design phase. No implementation yet.** This repo is currently just a design doc and a placeholder. See [docs/DESIGN.md](docs/DESIGN.md) for the planned API and rationale.
+🚧 **Design phase. No implementation yet.** This repo is currently a design surface and a placeholder.
+
+- [docs/DESIGN.md](docs/DESIGN.md) — full API, decision matrix, edge cases, architecture.
+- [docs/CONSENT_STORAGE.md](docs/CONSENT_STORAGE.md) — do I need a consent database? (short answer: no, but).
+- [docs/MODULARITY.md](docs/MODULARITY.md) — what each module guarantees and how to extend without a major bump.
 
 ## Why this exists
 
@@ -56,9 +60,12 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the full output shape, edge cases, and 
 
 ## Roadmap
 
-- [ ] Design doc (in progress)
+- [x] Design doc
+- [x] Consent-storage doc
+- [x] Modularity contract
 - [ ] Core API + types
-- [ ] Seed data: US, GB, DE, FR, CA, AU, BR, IN, JP (the markets that move first)
+- [ ] Seed data: US, GB, DE, FR, CA (incl. Quebec), AU, BR, IN, JP (the markets that move first)
+- [ ] ISO/IEC TS 27560:2023 audit-record serializer
 - [ ] Vercel adapter
 - [ ] Cloudflare Workers adapter
 - [ ] Brevo integration
