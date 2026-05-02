@@ -1,6 +1,8 @@
 # m24t — Design
 
-> Working design doc. Nothing here is implemented yet. Discussion welcome via issues.
+> Working design doc.
+>
+> **⚠ Read the [DISCLAIMER](../DISCLAIMER.md) before relying on anything in this document.** m24t is informational only, not legal advice. Maintainers carry zero liability.
 >
 > **Companion docs:** [CONSENT_STORAGE.md](./CONSENT_STORAGE.md) (do I need a consent DB?), [MODULARITY.md](./MODULARITY.md) (how to extend without a major version bump).
 
@@ -267,7 +269,8 @@ type EmailRules = {
     url: string
     jurisdiction: string                  // "EU"
     subRegime: string | null              // "DE-UWG-7" — per-member-state divergence
-    lastReviewed: string                  // "2025-09-12"
+    dataLastUpdated: string               // "2025-09-12" — maintainer's last edit, NOT a lawyer review date
+    lawyerAttestation: null | { lawyer, firm, jurisdiction, date, attestationUrl }
     confidence: "high" | "medium" | "low"
     extraterritorialReach: boolean
   }
@@ -303,7 +306,7 @@ type AuditRecord = {
     statute: string
     url: string
     jurisdiction: string
-    lastReviewed: string
+    dataLastUpdated: string
   }
   withdrawnAt: string | null
   withdrawalMethod: string | null

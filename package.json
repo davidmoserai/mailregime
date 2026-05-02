@@ -1,0 +1,81 @@
+{
+  "name": "m24t",
+  "version": "0.0.1",
+  "description": "Country code → email-marketing consent rules. The c15t for email.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./adapters/vercel": {
+      "types": "./dist/adapters/vercel.d.ts",
+      "import": "./dist/adapters/vercel.js"
+    },
+    "./adapters/cloudflare": {
+      "types": "./dist/adapters/cloudflare.d.ts",
+      "import": "./dist/adapters/cloudflare.js"
+    },
+    "./adapters/header": {
+      "types": "./dist/adapters/header.d.ts",
+      "import": "./dist/adapters/header.js"
+    },
+    "./adapters/static": {
+      "types": "./dist/adapters/static.d.ts",
+      "import": "./dist/adapters/static.js"
+    },
+    "./audit": {
+      "types": "./dist/audit/index.d.ts",
+      "import": "./dist/audit/index.js"
+    },
+    "./data/countries/*": {
+      "types": "./dist/data/countries/*.d.ts",
+      "import": "./dist/data/countries/*.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test --import tsx tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "consent",
+    "gdpr",
+    "can-spam",
+    "casl",
+    "lgpd",
+    "dpdp",
+    "email",
+    "marketing",
+    "compliance",
+    "double-opt-in"
+  ],
+  "author": "David Moser",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidmoserai/m24t.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davidmoserai/m24t/issues"
+  },
+  "homepage": "https://github.com/davidmoserai/m24t#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
