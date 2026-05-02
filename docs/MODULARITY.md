@@ -71,8 +71,8 @@ Auto-update on minor library upgrades is opt-in (`consentDataVersion: "latest"`)
 
 - **JSON, not code.** Per-country files in `m24t/data/countries/{ISO3166-1}.json`.
 - **Tree-shakable per country.** Apps that operate in 5 markets ship 5 country files.
-- **Carries metadata per record:** `code`, `regime`, `subRegime`, `statute`, `url`, `lastReviewed`, `confidence`, `extraterritorialReach`.
-- **Rolling reviews.** Each country has a `lastReviewed` date. Library logs a console warning in dev when a queried country's data is >12 months old.
+- **Carries metadata per record:** `code`, `regime`, `subRegime`, `statute`, `url`, `dataLastUpdated`, `confidence`, `extraterritorialReach`, `lawyerAttestation`.
+- **Rolling reviews.** Each country has a `dataLastUpdated` date (when the maintainer last touched the file — NOT a lawyer-review date). Library logs a console warning in dev when a queried country's data is >12 months old.
 - **No code in data.** Functions like `buildAuditRecord` live in core, not data. Data is purely declarative.
 
 ### adapters (country detection)
@@ -118,7 +118,7 @@ The following can be added without breaking the API:
 |---|---|---|
 | New country | `m24t/data/countries/XX.json` | data version only |
 | New subRegime under existing country | same JSON | data version only |
-| Updated `lastReviewed` / `confidence` | same JSON | data version only |
+| Updated `dataLastUpdated` / `confidence` / `lawyerAttestation` | same record | data version only |
 | New context (e.g. `"abandoned-cart"`) | core types + per-country mapping | minor library |
 | New adapter (e.g. AWS CloudFront geo) | new package `m24t-adapter-cloudfront` | independent |
 | New ESP integration | new package `m24t-integration-X` | independent |

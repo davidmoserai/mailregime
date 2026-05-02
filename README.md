@@ -84,11 +84,14 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the full output shape, edge cases, and 
 - [x] Consent-storage doc
 - [x] Modularity contract
 - [x] Liability shields (LICENSE, DISCLAIMER, CONTRIBUTING)
-- [ ] Core API + types
-- [ ] Seed data: US, GB, DE, FR, CA (incl. Quebec), AU, BR, IN, JP
-- [ ] ISO/IEC TS 27560:2023 audit-record serializer
-- [ ] Vercel adapter
-- [ ] Cloudflare Workers adapter
+- [x] Core API + types
+- [x] Seed data: US, GB, DE, CA (incl. Quebec), AU
+- [x] ISO/IEC TS 27560:2023 audit-record serializer
+- [x] Vercel adapter
+- [x] Cloudflare Workers adapter
+- [x] Static + generic-header adapters
+- [x] Tests + CI
+- [ ] Seed data: FR, BR, IN, JP (next batch)
 - [ ] Brevo integration
 - [ ] Resend integration
 - [ ] v0.1 publish to npm (gated on disclaimer review)

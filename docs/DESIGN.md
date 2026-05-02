@@ -163,7 +163,7 @@ Country alone isn't enough. `(country, context, relationship)` is the minimum vi
    │ record carries:      │ │   • cloudflare    │ │   • mailchimp        │
    │   code, regime,      │ │   • header        │ │   • klaviyo          │
    │   subRegime, statute,│ │   • maxmind       │ │   • resend           │
-   │   url, lastReviewed, │ │   • static        │ │                      │
+   │   url, dataLastUpd., │ │   • static        │ │                      │
    │   confidence         │ │     (testing)     │ │ Each emits the right │
    │                      │ │                   │ │ shape for that ESP   │
    │ Versioned separately │ │                   │ │ AND a portable       │
@@ -261,7 +261,7 @@ type EmailRules = {
 
   // Audit / proof
   proofRequired: ("timestamp" | "ip" | "source" | "wording" | "ua")[]
-  buildAuditRecord: (ctx: AuditContext) => AuditRecord
+  buildAuditRecord: (ctx: AuditContext) => Promise<AuditRecord>   // async — uses crypto.subtle for SHA-256
 
   // Citation (lawyer-facing)
   basis: {
@@ -293,7 +293,7 @@ type AuditRecord = {
   userAgent: string | null
   country: string                         // detected
   region: string | null                   // ISO 3166-2 (e.g. "US-CA", "CA-QC")
-  countrySource: "header" | "self-declared" | "billing"
+  countrySource: "header" | "self-declared" | "billing" | "static" | "unknown"
   context: Context
   relationship: Relationship
   channels: Channel[]
@@ -339,9 +339,19 @@ Specific regulatory items the schema must accommodate without breaking changes:
 | **IAB TCF v2.2** | **No.** | Adtech-only; would over-constrain email collection. Out of scope. |
 | **Global Privacy Control** | Recommendation only. | Browser signal for sale/share opt-out (CCPA). Not consent-grant. Library exposes `respectGpc: boolean` for US states. |
 
+## `unknownCountryPolicy` values
+
+When `getEmailRules` is called with `country: null`, the configured policy decides:
+
+| Policy | Behaviour |
+|---|---|
+| `"throw"` (default) | Throws an error. Forces the caller to handle missing-country explicitly. |
+| `"strict"` | Returns the strictest known regime (currently the GDPR baseline). For apps that prefer to over-block rather than crash. |
+| `"permissive"` | Returns the most permissive regime (currently CAN-SPAM). **Footgun. Discouraged.** Permissive defaults from unknown geographies have caused real fines. |
+
 ## Open questions
 
-1. **Data format**: JSON for data, TS for types, with a `consentDataVersion` independent of library SemVer. Mirrors how `tzdata` decouples from libc.
+1. **Data format**: TS for both types and data (with a `consentDataVersion` independent of library SemVer) — picked over JSON-with-a-build-step to keep authoring strongly typed at compile time. Mirrors how `tzdata` decouples from libc.
 2. **US states**: full first-class jurisdictions, accepted via optional `region: ISO3166-2` input. Layered `subRegimes` on output.
 3. **PECR similar-products**: expose both `softOptInScope: "similar-products"` and `requiresCallerSimilarityAssertion: true` so the API forces the developer to confirm fact-specific similarity.
 4. **Integrations packaging**: sub-paths (`m24t/integrations/brevo`) over separate npm packages. Version coupling is a feature for consent-data correctness.

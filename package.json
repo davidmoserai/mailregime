@@ -1,50 +1,61 @@
 {
   "name": "m24t",
   "version": "0.0.1",
-  "description": "Country code → email-marketing consent rules. The c15t for email.",
+  "description": "Country code → email-marketing-consent rules. Informational only, not legal advice.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./adapters/vercel": {
       "types": "./dist/adapters/vercel.d.ts",
-      "import": "./dist/adapters/vercel.js"
+      "import": "./dist/adapters/vercel.js",
+      "default": "./dist/adapters/vercel.js"
     },
     "./adapters/cloudflare": {
       "types": "./dist/adapters/cloudflare.d.ts",
-      "import": "./dist/adapters/cloudflare.js"
+      "import": "./dist/adapters/cloudflare.js",
+      "default": "./dist/adapters/cloudflare.js"
     },
     "./adapters/header": {
       "types": "./dist/adapters/header.d.ts",
-      "import": "./dist/adapters/header.js"
+      "import": "./dist/adapters/header.js",
+      "default": "./dist/adapters/header.js"
     },
     "./adapters/static": {
       "types": "./dist/adapters/static.d.ts",
-      "import": "./dist/adapters/static.js"
+      "import": "./dist/adapters/static.js",
+      "default": "./dist/adapters/static.js"
     },
     "./audit": {
       "types": "./dist/audit/index.d.ts",
-      "import": "./dist/audit/index.js"
+      "import": "./dist/audit/index.js",
+      "default": "./dist/audit/index.js"
     },
     "./data/countries/*": {
       "types": "./dist/data/countries/*.d.ts",
-      "import": "./dist/data/countries/*.js"
+      "import": "./dist/data/countries/*.js",
+      "default": "./dist/data/countries/*.js"
     }
   },
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "DISCLAIMER.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "test": "node --test --import tsx tests/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
   },
   "keywords": [
     "consent",
@@ -56,7 +67,8 @@
     "email",
     "marketing",
     "compliance",
-    "double-opt-in"
+    "double-opt-in",
+    "iso-27560"
   ],
   "author": "David Moser",
   "license": "MIT",

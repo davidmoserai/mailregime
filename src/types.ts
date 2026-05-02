@@ -144,6 +144,15 @@ export type CountryData = {
   byRegion?: Record<string, DeepPartial<EmailRulesData>>
 }
 
+/**
+ * DeepPartial used by country-data authoring (`byContext`, `byRelationship`,
+ * `byRegion`). Arrays are kept as full arrays — partial element overrides
+ * aren't supported because the merge replaces arrays wholesale by design.
+ * See `eval.ts` for merge semantics.
+ *
+ * Exported because country data authors write against it. Not intended
+ * for general use.
+ */
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends Array<infer U>
     ? Array<U>
@@ -169,12 +178,20 @@ export type AuditContext = {
   doiConfirmedAt?: string | null
   withdrawnAt?: string | null
   withdrawalMethod?: string | null
+  // Provenance of the country code. Pass through from the adapter's
+  // `CountryDetection.source` so the receipt records HOW jurisdiction
+  // was determined (header, billing, self-declared, etc.). Critical for
+  // audit defensibility.
+  countrySource?: AuditRecord["countrySource"]
 }
 
 export type AuditRecord = {
   schemaVersion: "m24t/1"
   iso27560Version: "1.0"
   consentId: string
+  // null when the caller hasn't yet hashed/pseudonymised the subject
+  // (e.g. anonymous newsletter signup before email verification). Should
+  // be populated once a stable identifier exists.
   subjectId: string | null
   capturedAt: string
   ip: string | null

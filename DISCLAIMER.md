@@ -47,7 +47,7 @@ If you fork or redistribute m24t, you must keep this DISCLAIMER and the LICENSE 
 
 ## Jurisdiction
 
-These terms are governed by the laws of the jurisdiction in which the LICENSE is asserted, without regard to conflict-of-law rules. Any dispute related to use of m24t is subject to the disclaimer of liability and waiver in the LICENSE.
+The LICENSE and this disclaimer do not commit any maintainer, author, or contributor to any particular jurisdiction or forum. Any dispute related to use of m24t is subject to the disclaimer of liability and waiver in the LICENSE, which the user accepted by using the software.
 
 ## In short
 
