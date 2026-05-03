@@ -1,6 +1,6 @@
 {
   "name": "mailregime",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Country code → email-marketing-consent rules. Informational only, not legal advice.",
   "type": "module",
   "main": "./dist/index.js",
@@ -37,6 +37,17 @@
       "import": "./dist/enrichers/*.js",
       "default": "./dist/enrichers/*.js"
     },
+    "./store": {
+      "types": "./dist/store/index.d.ts",
+      "import": "./dist/store/index.js",
+      "default": "./dist/store/index.js"
+    },
+    "./store/postgres": {
+      "types": "./dist/store/postgres.d.ts",
+      "import": "./dist/store/postgres.js",
+      "default": "./dist/store/postgres.js"
+    },
+    "./schemas/*": "./schemas/*",
     "./audit": {
       "types": "./dist/audit/index.d.ts",
       "import": "./dist/audit/index.js",
@@ -50,6 +61,7 @@
   },
   "files": [
     "dist",
+    "schemas",
     "README.md",
     "LICENSE",
     "DISCLAIMER.md",
@@ -60,6 +72,9 @@
     "CHANGELOG.md",
     "llms.txt"
   ],
+  "bin": {
+    "mailregime": "./dist/bin/cli.js"
+  },
   "scripts": {
     "build": "rm -rf dist && tsc",
     "test": "node --test --import tsx tests/*.test.ts",
@@ -93,7 +108,20 @@
   "engines": {
     "node": ">=20"
   },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0"
+  },
+  "peerDependencies": {
+    "postgres": "^3.4.0"
+  },
+  "peerDependenciesMeta": {
+    "postgres": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@types/node": "^20.0.0",
+    "postgres": "^3.4.0",
     "tsx": "^4.7.0",
     "typescript": "^5.4.0"
   },

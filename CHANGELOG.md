@@ -4,6 +4,43 @@ All notable changes to mailregime will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Note that **0.x releases may include breaking changes in any minor version** — this is the conventional pre-1.0 contract.
 
+## [0.3.0] - 2026-05-03
+
+### Added — self-host consent-receipt storage
+
+Optional, opt-in only. Library core stays stateless and offline; the storage helper is a separate sub-import that opens a connection to **your** Postgres database with **your** connection string and writes receipts to **your** schema. mailregime does not host data, does not run a service, and does not phone home. See updated [DISCLAIMER.md](DISCLAIMER.md).
+
+- **`mailregime/store/postgres`** — `PostgresStore` class with:
+  - `migrate()` — idempotent migration runner
+  - `save(record, rules)` — INSERT a consent receipt; computes `delete_after` from the country's retention rule so retention sweeps are a single indexed DELETE
+  - `findBySubject(subjectId)` — GDPR Art. 15 access-request helper
+  - `withdraw(consentId, method)` — keeps row until original `delete_after`
+  - `purgeOnWithdrawal(consentId, method)` — strict-erasure variant (advances `delete_after` to NOW())
+  - `sweep()` — daily-cron retention sweep
+- **`mailregime/store`** — `toRow(record, rules)` and `fromRow(row)` pure mapping functions for users with their own ORM client (Drizzle, Prisma, Kysely, raw pg)
+- **`schemas/`** — canonical SQL DDL + ORM fragments shipped in the package:
+  - `postgres/0001_init.sql` — apply with any tool (`psql`, `atlas`, `sqitch`, `dbmate`, raw)
+  - `drizzle/schema.ts` — Drizzle table fragment
+  - `prisma/schema.prisma` — Prisma model fragment
+  - `kysely/types.ts` — Kysely TS types
+- **`npx mailregime init`** — interactive setup. Prompts for SQL flavor and ORM, copies the matching schema fragment into your repo, optionally runs the migration against a connection string you provide.
+- **`npx mailregime migrate`** — non-interactive. Reads `DATABASE_URL` (or `--connection`) and applies pending migrations.
+
+The schema includes a `delete_after` column computed at insert time from the country's `consentRecordRetentionMonths`. Retention sweeps run as one indexed DELETE — no JSONB extraction, no full table scans.
+
+### Changed
+
+- **DISCLAIMER.md** — clarified that "offline" applies to the rules engine; the optional storage helper opens a connection to your DB only when you explicitly import it.
+- **package.json** — adds `bin: { mailregime }`, sub-path exports for `./store` and `./store/postgres`, optional `postgres` peer dependency, `@clack/prompts` for the CLI.
+
+### Honest tradeoffs
+
+- The CLI runs at developer-machine setup time. The runtime library never imports it.
+- `postgres` is a peer dependency — install it only if you use `PostgresStore`. Tree-shaking ensures core users don't pull it.
+- MySQL / SQLite / MongoDB adapters are not yet shipped. Add when a user files an issue. The canonical SQL DDL is a starting point for non-Postgres users.
+
+[0.3.0]: https://github.com/davidmoserai/mailregime/releases/tag/v0.3.0
+
 ## [0.2.1] - 2026-05-03
 
 Verification pass on the original 5 countries (US, GB, DE, CA, AU) — same primary-source spot-check process applied to Tier-2 in v0.2.0. CA + AU verified clean. Three corrections applied:

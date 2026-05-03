@@ -24,7 +24,7 @@ Full terms in [LICENSE](./LICENSE), [DISCLAIMER.md](./DISCLAIMER.md), [CONTRIBUT
 
 ## Status
 
-`v0.2.0` — early. 27 countries bundled. Public API may change in any minor version (standard 0.x contract). Pin a version, read diffs.
+`v0.3.0` — early. 27 countries bundled + self-host CLI for consent-receipt storage. Public API may change in any minor version (standard 0.x contract). Pin a version, read diffs.
 
 - [docs/DESIGN.md](docs/DESIGN.md) — full API, decision matrix, edge cases, architecture.
 - [docs/CONSENT_STORAGE.md](docs/CONSENT_STORAGE.md) — do I need a consent database? (short answer: no, but).
@@ -40,7 +40,42 @@ npm install mailregime
 # or: pnpm add mailregime  /  yarn add mailregime  /  bun add mailregime
 ```
 
-Zero runtime dependencies. ESM only. Edge-runtime safe.
+Zero runtime dependencies for the rules engine. ESM only. Edge-runtime safe.
+
+## Self-host audit trail (optional)
+
+If you want mailregime to handle consent-receipt storage for you (still in **your** database — we never host data):
+
+```bash
+# 1. Install the postgres peer dep (one-time)
+npm install postgres
+
+# 2. Initialise schema in your DB (interactive)
+npx mailregime init
+
+# 3. Use it in your route handler
+import { getEmailRules } from "mailregime"
+import { PostgresStore } from "mailregime/store/postgres"
+
+const store = new PostgresStore({ connectionString: process.env.DATABASE_URL! })
+
+const rules  = getEmailRules({ country, context: "newsletter-signup", relationship: "none" })
+const record = await rules.buildAuditRecord({ ip, userAgent, sourceUrl, wording, formVersion })
+await store.save(record, rules)
+
+// GDPR Art. 15 access request
+const history = await store.findBySubject(userIdHash)
+
+// On unsubscribe
+await store.withdraw(consentId, "one-click-unsub")
+
+// Cron sweep — deletes receipts past their retention window
+await store.sweep()
+```
+
+Drizzle / Prisma / Kysely users: paste the matching schema fragment from [`schemas/`](./schemas/) into your existing schema file and let your migration tool create the table; then use `PostgresStore` (or write the SQL yourself with `toRow(record, rules)` from `mailregime/store`).
+
+Don't want the storage helper? **Skip it.** The library never opens a connection unless you import the store.
 
 ## Install with an AI agent
 

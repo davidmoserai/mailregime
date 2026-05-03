@@ -1,0 +1,36 @@
+// INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
+//
+// Append this model to your project's schema.prisma, then run
+//   npx prisma migrate dev --name mailregime_consent_init
+// to create the table. Maps 1:1 to the canonical SQL in
+// schemas/postgres/0001_init.sql.
+
+model MailregimeConsentReceipt {
+  consentId           String    @id                                  @map("consent_id")
+  subjectId           String?                                        @map("subject_id")
+  capturedAt          DateTime                                       @map("captured_at")           @db.Timestamptz()
+  deleteAfter         DateTime                                       @map("delete_after")          @db.Timestamptz()
+  retentionMonths     Int                                            @map("retention_months")
+  country             String
+  region              String?
+  countrySource       String                                         @map("country_source")
+  context             String
+  relationship        String
+  statute             String
+  statuteUrl          String                                         @map("statute_url")
+  statuteJurisdiction String                                         @map("statute_jurisdiction")
+  dataLastUpdated     String                                         @map("data_last_updated")
+  wordingHash         String                                         @map("wording_hash")
+  doiConfirmedAt      DateTime?                                      @map("doi_confirmed_at")      @db.Timestamptz()
+  withdrawnAt         DateTime?                                      @map("withdrawn_at")          @db.Timestamptz()
+  withdrawalMethod    String?                                        @map("withdrawal_method")
+  receipt             Json
+  schemaVersion       String    @default("mailregime/1")             @map("schema_version")
+
+  @@index([subjectId])
+  @@index([capturedAt])
+  @@index([deleteAfter])
+  @@index([country, region])
+  @@index([withdrawnAt])
+  @@map("mailregime_consent_receipts")
+}
