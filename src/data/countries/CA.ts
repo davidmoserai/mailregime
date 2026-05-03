@@ -58,12 +58,12 @@ export const CA: CountryData = {
       url: "https://crtc.gc.ca/eng/com500/guide.htm",
       jurisdiction: "CA",
       subRegime: null,
-      dataLastUpdated: "2026-05-02",
+      dataLastUpdated: "2026-05-03",
       confidence: "medium",
       extraterritorialReach: true,
       lawyerAttestation: null,
     },
-    suggestedTemplate: "brevo-doi",
+    suggestedTemplate: "double-opt-in",
   },
   byContext: {
     "lead-magnet": {
@@ -106,7 +106,7 @@ export const CA: CountryData = {
         url: "https://www.cai.gouv.qc.ca/",
         jurisdiction: "CA",
         subRegime: "QC-Law-25",
-        dataLastUpdated: "2026-05-02",
+        dataLastUpdated: "2026-05-03",
         confidence: "medium",
         extraterritorialReach: true,
         lawyerAttestation: null,

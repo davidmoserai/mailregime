@@ -2,15 +2,16 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// UK GDPR + PECR (Privacy and Electronic Communications Regulations 2003)
-// + Data (Use and Access) Act 2025. Post-Brexit. NOT a GDPR alias —
-// modelled separately because UK divergence will widen over time.
-export const GB: CountryData = {
-  code: "GB",
-  regime: "UK-GDPR",
+// Swiss revised FADP (in force 1 Sept 2023) + UWG Art. 3(1)(o)
+// (Unfair Competition Act). UWG enforcement is CRIMINAL — fines and
+// imprisonment up to 3 years possible. FDPIC requires mention of
+// source of address in first marketing email.
+export const CH: CountryData = {
+  code: "CH",
+  regime: "FADP",
   defaults: {
     canCollectForMarketing: true,
-    optIn: "double",
+    optIn: "express",
     checkboxRequired: true,
     bundlingAllowed: false,
     prechecking: "forbidden",
@@ -21,42 +22,34 @@ export const GB: CountryData = {
     requiresCallerSimilarityAssertion: false,
     impliedConsentTtlMonths: null,
     b2bExemption: {
-      regime: "gdpr-lia",
+      regime: "none",
       conditions: [
-        "legitimate interest assessment required",
-        "B2B corporate subscribers (companies, LLPs) have weaker PECR protections than sole traders / partnerships",
+        "UWG Art. 3(1)(o) applies to mass advertising regardless of recipient type",
       ],
     },
     consentLanguage: { required: [], mustMatchUserLocale: false },
-    dataResidency: {
-      storageRegion: "any",
-      crossBorderTransferMechanism: "scc",
-    },
+    dataResidency: { storageRegion: "any", crossBorderTransferMechanism: "adequacy" },
     consentRecordRetentionMonths: 60,
     sensitiveDataFlags: {
       healthMarketingBlocked: true,
       politicalMarketingBlocked: true,
       childrenBlocked: true,
     },
-    preferenceCenter: {
-      granularityRequired: "purpose",
-      perEmailUnsubAlsoRequired: true,
-    },
+    preferenceCenter: { granularityRequired: "purpose", perEmailUnsubAlsoRequired: true },
     senderIdentity: {
       physicalAddressRequired: true,
       legalEntityNameRequired: true,
       representativeRequired: true,
     },
     reConsentTriggerMonths: 24,
-    childAgeOfConsent: 13,
-    parentalVerificationRequired: true,
+    childAgeOfConsent: 16,
+    parentalVerificationRequired: false,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute:
-        "UK GDPR + PECR (Privacy and Electronic Communications Regulations 2003) + Data (Use and Access) Act 2025",
-      url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/consent/",
-      jurisdiction: "UK",
-      subRegime: "PECR",
+      statute: "Swiss FADP (revised, in force 1 Sept 2023, SR 235.1) + Bundesgesetz gegen den unlauteren Wettbewerb (UWG) Art. 3 Abs. 1 lit. o (SR 241)",
+      url: "https://www.edoeb.admin.ch/en/advertising-marketing",
+      jurisdiction: "CH",
+      subRegime: "CH-UWG",
       dataLastUpdated: "2026-05-03",
       confidence: "medium",
       extraterritorialReach: true,
@@ -65,14 +58,8 @@ export const GB: CountryData = {
     suggestedTemplate: "double-opt-in",
   },
   byContext: {
-    "lead-magnet": {
-      canCollectForMarketing: false,
-      optIn: "blocked",
-      suggestedTemplate: "blocked",
-    },
-    transactional: {
-      proofRequired: [],
-    },
+    "lead-magnet": { canCollectForMarketing: false, optIn: "blocked", suggestedTemplate: "blocked" },
+    transactional: { proofRequired: [] },
   },
   byRelationship: {
     "existing-customer": {

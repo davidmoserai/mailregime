@@ -2,15 +2,15 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// UK GDPR + PECR (Privacy and Electronic Communications Regulations 2003)
-// + Data (Use and Access) Act 2025. Post-Brexit. NOT a GDPR alias —
-// modelled separately because UK divergence will widen over time.
-export const GB: CountryData = {
-  code: "GB",
-  regime: "UK-GDPR",
+// GDPR + Markedsføringsloven §10 (LBK nr 1420/2024). Forbrugerombudsmanden
+// is highly active — fines per email (DKK 100/email up to 100, then DKK
+// 500/email). "Similar products" interpreted strictly. No B2B exemption.
+export const DK: CountryData = {
+  code: "DK",
+  regime: "GDPR",
   defaults: {
     canCollectForMarketing: true,
-    optIn: "double",
+    optIn: "express",
     checkboxRequired: true,
     bundlingAllowed: false,
     prechecking: "forbidden",
@@ -21,27 +21,21 @@ export const GB: CountryData = {
     requiresCallerSimilarityAssertion: false,
     impliedConsentTtlMonths: null,
     b2bExemption: {
-      regime: "gdpr-lia",
+      regime: "none",
       conditions: [
-        "legitimate interest assessment required",
-        "B2B corporate subscribers (companies, LLPs) have weaker PECR protections than sole traders / partnerships",
+        "MFL §10 covers all recipients including legal persons",
+        "narrow exception only for messages to a function (info@) clearly relevant to that function",
       ],
     },
-    consentLanguage: { required: [], mustMatchUserLocale: false },
-    dataResidency: {
-      storageRegion: "any",
-      crossBorderTransferMechanism: "scc",
-    },
+    consentLanguage: { required: ["da-DK"], mustMatchUserLocale: true },
+    dataResidency: { storageRegion: "any", crossBorderTransferMechanism: "scc" },
     consentRecordRetentionMonths: 60,
     sensitiveDataFlags: {
       healthMarketingBlocked: true,
       politicalMarketingBlocked: true,
       childrenBlocked: true,
     },
-    preferenceCenter: {
-      granularityRequired: "purpose",
-      perEmailUnsubAlsoRequired: true,
-    },
+    preferenceCenter: { granularityRequired: "purpose", perEmailUnsubAlsoRequired: true },
     senderIdentity: {
       physicalAddressRequired: true,
       legalEntityNameRequired: true,
@@ -52,11 +46,10 @@ export const GB: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute:
-        "UK GDPR + PECR (Privacy and Electronic Communications Regulations 2003) + Data (Use and Access) Act 2025",
-      url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/consent/",
-      jurisdiction: "UK",
-      subRegime: "PECR",
+      statute: "GDPR Art. 6(1)(a) + Art. 7 + Markedsføringsloven (LBK nr 1420 af 02/12/2024) §10 + Databeskyttelsesloven §6(3)",
+      url: "https://www.retsinformation.dk/eli/lta/2024/1420",
+      jurisdiction: "EU",
+      subRegime: "DK-MFL-10",
       dataLastUpdated: "2026-05-03",
       confidence: "medium",
       extraterritorialReach: true,
@@ -65,20 +58,15 @@ export const GB: CountryData = {
     suggestedTemplate: "double-opt-in",
   },
   byContext: {
-    "lead-magnet": {
-      canCollectForMarketing: false,
-      optIn: "blocked",
-      suggestedTemplate: "blocked",
-    },
-    transactional: {
-      proofRequired: [],
-    },
+    "lead-magnet": { canCollectForMarketing: false, optIn: "blocked", suggestedTemplate: "blocked" },
+    transactional: { proofRequired: [] },
   },
   byRelationship: {
     "existing-customer": {
       softOptInAvailable: true,
       softOptInScope: "similar-products",
       requiresCallerSimilarityAssertion: true,
+      impliedConsentTtlMonths: 12,
     },
   },
 }

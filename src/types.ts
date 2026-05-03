@@ -34,7 +34,17 @@ export type Channel = "email" | "sms" | "postal"
 export type OptIn = "single" | "double" | "express" | "blocked"
 
 export type B2BExemption = {
-  regime: "casl-intra-org" | "gdpr-lia" | "can-spam-default" | "none"
+  // Tag for the legal theory under which B2B email may be sent without
+  // full consumer-grade consent. `conditions` carries the per-jurisdiction
+  // nuance. Pick the closest tag and document in conditions[]; if none
+  // fit, propose a new tag in a PR.
+  regime:
+    | "casl-intra-org"          // CASL §3(a)(ii) — intra-organisation only
+    | "gdpr-lia"                // GDPR legitimate interest assessment
+    | "can-spam-default"        // CAN-SPAM opt-out, B2B fully covered
+    | "publicly-disclosed"      // address publicly published in business capacity (NZ deemed, JP business addresses)
+    | "function-address"        // generic role addresses (info@, sales@) treated lighter
+    | "none"
   conditions: string[]
 }
 
@@ -88,7 +98,14 @@ export type EmailRulesData = {
   }
 
   dataResidency: {
+    // "eu" includes the wider EEA (Iceland, Norway, Liechtenstein) for
+    // transfer purposes — they are part of the GDPR free-flow zone.
+    // "local" means data must stay in-country.
     storageRegion: "any" | "eu" | "local"
+    // Mechanism the SENDING jurisdiction requires for outbound personal
+    // data transfers. "none-required" means the local law does not gate
+    // outbound transfers; "explicit-consent" means data subjects must
+    // explicitly opt in to the transfer.
     crossBorderTransferMechanism:
       | "none-required"
       | "scc"
@@ -125,7 +142,11 @@ export type EmailRulesData = {
 
   basis: Basis
 
-  suggestedTemplate: "brevo-doi" | "single-opt-in" | "blocked"
+  // ESP-agnostic hint to the caller. Maps directly to optIn but spelled
+  // out so callers can route to their ESP's matching primitive (Brevo
+  // /contacts/doi, Mailchimp double_optin flag, Resend audiences DOI, etc.)
+  // without needing to re-derive from optIn.
+  suggestedTemplate: "double-opt-in" | "single-opt-in" | "blocked"
 }
 
 // Live rules object with helpers attached at evaluation time.

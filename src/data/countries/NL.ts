@@ -2,17 +2,16 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// GDPR + UWG §7 Abs. 2 Nr. 3 (Gesetz gegen den unlauteren Wettbewerb).
-// Germany applies a stricter "Bestandskundenausnahme" — soft opt-in is
-// available only for similar products, the customer must have been told
-// about marketing use at point of sale, and the unsubscribe link must
-// appear in every message.
-export const DE: CountryData = {
-  code: "DE",
+// GDPR + Telecommunicatiewet Art. 11.7. Most permissive B2B email
+// regime among major EU jurisdictions — Tw Art. 11.7(3) opt-out for
+// professionals. Highest age of digital consent (16). Dual enforcement
+// by ACM (Tw) and AP (GDPR).
+export const NL: CountryData = {
+  code: "NL",
   regime: "GDPR",
   defaults: {
     canCollectForMarketing: true,
-    optIn: "double",
+    optIn: "express",
     checkboxRequired: true,
     bundlingAllowed: false,
     prechecking: "forbidden",
@@ -25,27 +24,19 @@ export const DE: CountryData = {
     b2bExemption: {
       regime: "gdpr-lia",
       conditions: [
-        "legitimate interest assessment required",
-        "UWG §7 case law generally requires consent even for B2B",
+        "Tw Art. 11.7(3): legal entities + professionals where address provided for that purpose",
+        "sender clearly identified, easy opt-out, no prior objection",
       ],
     },
-    // German required at point of collection — UWG §7 case law looks at
-    // whether the consent was understandable to the recipient.
-    consentLanguage: { required: ["de-DE"], mustMatchUserLocale: true },
-    dataResidency: {
-      storageRegion: "any",
-      crossBorderTransferMechanism: "scc",
-    },
+    consentLanguage: { required: ["nl-NL"], mustMatchUserLocale: true },
+    dataResidency: { storageRegion: "any", crossBorderTransferMechanism: "scc" },
     consentRecordRetentionMonths: 60,
     sensitiveDataFlags: {
       healthMarketingBlocked: true,
       politicalMarketingBlocked: true,
       childrenBlocked: true,
     },
-    preferenceCenter: {
-      granularityRequired: "purpose",
-      perEmailUnsubAlsoRequired: true,
-    },
+    preferenceCenter: { granularityRequired: "purpose", perEmailUnsubAlsoRequired: true },
     senderIdentity: {
       physicalAddressRequired: true,
       legalEntityNameRequired: true,
@@ -56,10 +47,10 @@ export const DE: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "GDPR Art. 6(1)(a) + Art. 7 + UWG §7 Abs. 2 Nr. 3",
-      url: "https://gdpr-info.eu/art-6-gdpr/",
+      statute: "GDPR Art. 6(1)(a) + Art. 7 + Telecommunicatiewet Art. 11.7 + UAVG",
+      url: "https://www.autoriteitpersoonsgegevens.nl/en/themes/internet-and-smart-devices/advertising/digital-direct-marketing",
       jurisdiction: "EU",
-      subRegime: "DE-UWG",
+      subRegime: "NL-TW",
       dataLastUpdated: "2026-05-03",
       confidence: "medium",
       extraterritorialReach: true,
@@ -68,23 +59,14 @@ export const DE: CountryData = {
     suggestedTemplate: "double-opt-in",
   },
   byContext: {
-    "lead-magnet": {
-      canCollectForMarketing: false,
-      optIn: "blocked",
-      suggestedTemplate: "blocked",
-    },
-    transactional: {
-      proofRequired: [],
-    },
+    "lead-magnet": { canCollectForMarketing: false, optIn: "blocked", suggestedTemplate: "blocked" },
+    transactional: { proofRequired: [] },
   },
   byRelationship: {
     "existing-customer": {
       softOptInAvailable: true,
       softOptInScope: "similar-products",
       requiresCallerSimilarityAssertion: true,
-      // No statutory hard limit but UWG case law treats long inactivity
-      // as undermining "reasonable expectation"; ~24mo is industry baseline.
-      impliedConsentTtlMonths: 24,
     },
   },
 }

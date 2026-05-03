@@ -14,7 +14,7 @@ A country-code → email-marketing-consent-rules library. Pure function in, stru
 npm install mailregime
 ```
 
-Zero runtime dependencies. ESM only. Edge-runtime safe (Vercel Edge, Cloudflare Workers, Deno, Bun, Node ≥18).
+Zero runtime dependencies. ESM only. Edge-runtime safe (Vercel Edge, Cloudflare Workers, Deno, Bun, Node ≥20). Node 20+ required for `crypto.subtle` as a global.
 
 ## Minimum-viable wiring (the 90% case)
 

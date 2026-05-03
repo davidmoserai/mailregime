@@ -90,6 +90,41 @@ Auto-update on minor library upgrades is opt-in (`consentDataVersion: "latest"`)
 - **No detection adapter is mandatory.** Apps can pass `{ country: "DE" }` directly.
 - Future detection sources (a Vercel-native integration, a header from a different CDN, a self-declared profile field) are **new adapter packages, not core changes**.
 
+### enrichers (per-jurisdiction region refinement)
+
+CDN headers max out at ISO 3166-2 codes. Some jurisdictions have sub-national regions with material legal differences but **no ISO code** (e.g. Belgium's Deutschsprachige Gemeinschaft) or that simply aren't surfaced by edge providers. Enrichers fix this without growing the core or breaking the adapter contract.
+
+```ts
+type Enricher<Signals> = (
+  detection: CountryDetection,
+  signals?: Signals,
+) => CountryDetection
+```
+
+**Single contract:** same input + output shape as adapters. Caller supplies optional jurisdiction-specific signals (postal code, declared locale, billing city, etc.). Enricher returns a refined detection — typically with a more specific `region` field — or the input unchanged if no refinement applies.
+
+```ts
+import { fromVercelRequest } from "mailregime/adapters/vercel"
+import { enrichBE } from "mailregime/enrichers/be"
+
+const detection = enrichBE(
+  fromVercelRequest(request),
+  { postalCode: body.postcode, declaredLocale: body.locale },
+)
+const rules = getEmailRules({
+  country: detection.country,
+  region: detection.region,
+  context: "newsletter-signup",
+  relationship: "none",
+})
+```
+
+- **Pure functions.** No I/O. Identical input → identical output.
+- **Opt-in per import.** Tree-shaken if unused. Apps in 5 markets ship 5 enrichers max.
+- **Country-gated.** Each enricher checks `detection.country` and returns the input unchanged if it doesn't apply. Safe to call unconditionally.
+- **Adding a new enricher is a new file**, not a core change. PRs welcome — see [CONTRIBUTING.md](../CONTRIBUTING.md).
+- **Currently shipped:** `enrichBE`. Roadmap: enrichers for any jurisdiction where users open issues with primary-source citations showing CDN-undetectable region rules.
+
 ### integrations (ESPs) — planned, not yet shipped
 
 ESP integrations (Brevo, Resend, Mailchimp, Klaviyo) are planned but not yet implemented. The intended contract:

@@ -135,7 +135,7 @@ function strictFallback(country: string | null): EmailRulesData {
       extraterritorialReach: false,
       lawyerAttestation: null,
     },
-    suggestedTemplate: "brevo-doi",
+    suggestedTemplate: "double-opt-in",
   }
 }
 

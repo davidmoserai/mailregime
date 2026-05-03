@@ -2,15 +2,16 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// UK GDPR + PECR (Privacy and Electronic Communications Regulations 2003)
-// + Data (Use and Access) Act 2025. Post-Brexit. NOT a GDPR alias —
-// modelled separately because UK divergence will widen over time.
-export const GB: CountryData = {
-  code: "GB",
-  regime: "UK-GDPR",
+// GDPR + LCEN Art. L.34-5 (Code des postes et des communications
+// électroniques). CNIL is among the most aggressive EU DPAs. B2B email
+// to professional addresses is opt-out under CNIL guidance; B2C is
+// strict opt-in. "Similar products" interpreted narrowly (same family).
+export const FR: CountryData = {
+  code: "FR",
+  regime: "GDPR",
   defaults: {
     canCollectForMarketing: true,
-    optIn: "double",
+    optIn: "express",
     checkboxRequired: true,
     bundlingAllowed: false,
     prechecking: "forbidden",
@@ -23,40 +24,35 @@ export const GB: CountryData = {
     b2bExemption: {
       regime: "gdpr-lia",
       conditions: [
-        "legitimate interest assessment required",
-        "B2B corporate subscribers (companies, LLPs) have weaker PECR protections than sole traders / partnerships",
+        "professional-context email to job function",
+        "sender clearly identified, commercial nature disclosed",
+        "opt-out in every message",
+        "generic addresses (info@, contact@) treated as legal-entity data",
       ],
     },
-    consentLanguage: { required: [], mustMatchUserLocale: false },
-    dataResidency: {
-      storageRegion: "any",
-      crossBorderTransferMechanism: "scc",
-    },
+    consentLanguage: { required: ["fr-FR"], mustMatchUserLocale: true },
+    dataResidency: { storageRegion: "any", crossBorderTransferMechanism: "scc" },
     consentRecordRetentionMonths: 60,
     sensitiveDataFlags: {
       healthMarketingBlocked: true,
       politicalMarketingBlocked: true,
       childrenBlocked: true,
     },
-    preferenceCenter: {
-      granularityRequired: "purpose",
-      perEmailUnsubAlsoRequired: true,
-    },
+    preferenceCenter: { granularityRequired: "purpose", perEmailUnsubAlsoRequired: true },
     senderIdentity: {
       physicalAddressRequired: true,
       legalEntityNameRequired: true,
       representativeRequired: true,
     },
     reConsentTriggerMonths: 24,
-    childAgeOfConsent: 13,
+    childAgeOfConsent: 15,
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute:
-        "UK GDPR + PECR (Privacy and Electronic Communications Regulations 2003) + Data (Use and Access) Act 2025",
-      url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/consent/",
-      jurisdiction: "UK",
-      subRegime: "PECR",
+      statute: "GDPR Art. 6(1)(a) + Art. 7 + LCEN Art. L.34-5 (Code des postes et des communications électroniques) + Loi Informatique et Libertés Art. 45",
+      url: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique",
+      jurisdiction: "EU",
+      subRegime: "FR-LCEN",
       dataLastUpdated: "2026-05-03",
       confidence: "medium",
       extraterritorialReach: true,
@@ -65,14 +61,8 @@ export const GB: CountryData = {
     suggestedTemplate: "double-opt-in",
   },
   byContext: {
-    "lead-magnet": {
-      canCollectForMarketing: false,
-      optIn: "blocked",
-      suggestedTemplate: "blocked",
-    },
-    transactional: {
-      proofRequired: [],
-    },
+    "lead-magnet": { canCollectForMarketing: false, optIn: "blocked", suggestedTemplate: "blocked" },
+    transactional: { proofRequired: [] },
   },
   byRelationship: {
     "existing-customer": {

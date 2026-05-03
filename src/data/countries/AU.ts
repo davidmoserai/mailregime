@@ -50,12 +50,12 @@ export const AU: CountryData = {
       url: "https://www.acma.gov.au/avoid-sending-spam",
       jurisdiction: "AU",
       subRegime: null,
-      dataLastUpdated: "2026-05-02",
+      dataLastUpdated: "2026-05-03",
       confidence: "medium",
       extraterritorialReach: false,
       lawyerAttestation: null,
     },
-    suggestedTemplate: "brevo-doi",
+    suggestedTemplate: "double-opt-in",
   },
   byContext: {
     transactional: {

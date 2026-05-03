@@ -85,6 +85,43 @@ test("lookupCountry — case-insensitive", () => {
   assert.ok(lookupCountry("Us"))
 })
 
+test("Tier-2 countries are bundled and queryable", () => {
+  const tier2 = ["FR", "IT", "ES", "NL", "BE", "IE", "AT", "PL", "SE", "DK",
+                 "CH", "NO", "JP", "KR", "SG", "IN", "NZ", "BR", "MX",
+                 "AE", "IL", "ZA"]
+  for (const code of tier2) {
+    assert.ok(lookupCountry(code), `${code} not registered`)
+  }
+})
+
+test("FR — express opt-in + French language requirement", () => {
+  const rules = getEmailRules({ country: "FR", context: "newsletter-signup", relationship: "none" })
+  assert.equal(rules.optIn, "express")
+  assert.deepEqual(rules.consentLanguage.required, ["fr-FR"])
+  assert.equal(rules.basis.subRegime, "FR-LCEN")
+})
+
+test("IN — DPDP, no soft opt-in even for existing customers", () => {
+  const rules = getEmailRules({ country: "IN", context: "newsletter-signup", relationship: "existing-customer" })
+  assert.equal(rules.softOptInAvailable, false)
+  assert.equal(rules.childAgeOfConsent, 18)
+})
+
+test("PL — strictest EU regime, no soft opt-in", () => {
+  const rules = getEmailRules({ country: "PL", context: "newsletter-signup", relationship: "existing-customer" })
+  assert.equal(rules.softOptInAvailable, false)
+})
+
+test("NZ — permissive B2B via deemed consent", () => {
+  const rules = getEmailRules({ country: "NZ", context: "newsletter-signup", relationship: "publicly-listed-business" })
+  assert.equal(rules.optIn, "single")
+})
+
+test("BE — German-speaking Community (BE-DG) overrides language to de-BE", () => {
+  const rules = getEmailRules({ country: "BE", region: "BE-DG", context: "newsletter-signup", relationship: "none" })
+  assert.deepEqual(rules.consentLanguage.required, ["de-BE"])
+})
+
 test("registerCountry — overrides bundled record", () => {
   const original = lookupCountry("US")
   assert.ok(original)

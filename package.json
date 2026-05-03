@@ -1,6 +1,6 @@
 {
   "name": "mailregime",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Country code → email-marketing-consent rules. Informational only, not legal advice.",
   "type": "module",
   "main": "./dist/index.js",
@@ -31,6 +31,11 @@
       "types": "./dist/adapters/static.d.ts",
       "import": "./dist/adapters/static.js",
       "default": "./dist/adapters/static.js"
+    },
+    "./enrichers/*": {
+      "types": "./dist/enrichers/*.d.ts",
+      "import": "./dist/enrichers/*.js",
+      "default": "./dist/enrichers/*.js"
     },
     "./audit": {
       "types": "./dist/audit/index.d.ts",

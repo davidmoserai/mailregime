@@ -2,17 +2,16 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// GDPR + UWG §7 Abs. 2 Nr. 3 (Gesetz gegen den unlauteren Wettbewerb).
-// Germany applies a stricter "Bestandskundenausnahme" — soft opt-in is
-// available only for similar products, the customer must have been told
-// about marketing use at point of sale, and the unsubscribe link must
-// appear in every message.
-export const DE: CountryData = {
-  code: "DE",
+// GDPR + ePrivacy Regulations 2011 (S.I. 336/2011), Reg. 13. Criminal
+// offence: up to €5K per email (summary) / €250K (indictment, body
+// corporate). DPC enforcement among the most active in the EU. Soft
+// opt-in window: 12 months from last sale.
+export const IE: CountryData = {
+  code: "IE",
   regime: "GDPR",
   defaults: {
     canCollectForMarketing: true,
-    optIn: "double",
+    optIn: "express",
     checkboxRequired: true,
     bundlingAllowed: false,
     prechecking: "forbidden",
@@ -25,27 +24,20 @@ export const DE: CountryData = {
     b2bExemption: {
       regime: "gdpr-lia",
       conditions: [
-        "legitimate interest assessment required",
-        "UWG §7 case law generally requires consent even for B2B",
+        "Reg. 13 + DPC corporate-subscriber guidance: corporate subscribers may receive marketing on opt-out basis",
+        "valid opt-out + sender ID required in every message",
+        "must consult Reg. 13 opt-out registers",
       ],
     },
-    // German required at point of collection — UWG §7 case law looks at
-    // whether the consent was understandable to the recipient.
-    consentLanguage: { required: ["de-DE"], mustMatchUserLocale: true },
-    dataResidency: {
-      storageRegion: "any",
-      crossBorderTransferMechanism: "scc",
-    },
+    consentLanguage: { required: [], mustMatchUserLocale: false },
+    dataResidency: { storageRegion: "any", crossBorderTransferMechanism: "scc" },
     consentRecordRetentionMonths: 60,
     sensitiveDataFlags: {
       healthMarketingBlocked: true,
       politicalMarketingBlocked: true,
       childrenBlocked: true,
     },
-    preferenceCenter: {
-      granularityRequired: "purpose",
-      perEmailUnsubAlsoRequired: true,
-    },
+    preferenceCenter: { granularityRequired: "purpose", perEmailUnsubAlsoRequired: true },
     senderIdentity: {
       physicalAddressRequired: true,
       legalEntityNameRequired: true,
@@ -56,10 +48,10 @@ export const DE: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "GDPR Art. 6(1)(a) + Art. 7 + UWG §7 Abs. 2 Nr. 3",
-      url: "https://gdpr-info.eu/art-6-gdpr/",
+      statute: "GDPR Art. 6(1)(a) + Art. 7 + ePrivacy Regulations 2011 (S.I. 336/2011) Reg. 13 (esp. 13(1) opt-in, 13(11) soft opt-in) + Data Protection Act 2018 §31",
+      url: "https://www.dataprotection.ie/en/organisations/rules-electronic-and-direct-marketing",
       jurisdiction: "EU",
-      subRegime: "DE-UWG",
+      subRegime: "IE-ePR-2011",
       dataLastUpdated: "2026-05-03",
       confidence: "medium",
       extraterritorialReach: true,
@@ -68,23 +60,16 @@ export const DE: CountryData = {
     suggestedTemplate: "double-opt-in",
   },
   byContext: {
-    "lead-magnet": {
-      canCollectForMarketing: false,
-      optIn: "blocked",
-      suggestedTemplate: "blocked",
-    },
-    transactional: {
-      proofRequired: [],
-    },
+    "lead-magnet": { canCollectForMarketing: false, optIn: "blocked", suggestedTemplate: "blocked" },
+    transactional: { proofRequired: [] },
   },
   byRelationship: {
     "existing-customer": {
+      // 12 months from last sale per DPC guidance
       softOptInAvailable: true,
       softOptInScope: "similar-products",
       requiresCallerSimilarityAssertion: true,
-      // No statutory hard limit but UWG case law treats long inactivity
-      // as undermining "reasonable expectation"; ~24mo is industry baseline.
-      impliedConsentTtlMonths: 24,
+      impliedConsentTtlMonths: 12,
     },
   },
 }

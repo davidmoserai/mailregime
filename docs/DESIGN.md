@@ -276,7 +276,7 @@ type EmailRules = {
   }
 
   // Suggested ESP wiring
-  suggestedTemplate: "brevo-doi" | "single-opt-in" | "blocked"
+  suggestedTemplate: "double-opt-in" | "single-opt-in" | "blocked"
 }
 ```
 

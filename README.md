@@ -24,7 +24,7 @@ Full terms in [LICENSE](./LICENSE), [DISCLAIMER.md](./DISCLAIMER.md), [CONTRIBUT
 
 ## Status
 
-`v0.1.0` — early. Public API may change in any minor version (standard 0.x contract). Pin a version, read diffs.
+`v0.2.0` — early. 27 countries bundled. Public API may change in any minor version (standard 0.x contract). Pin a version, read diffs.
 
 - [docs/DESIGN.md](docs/DESIGN.md) — full API, decision matrix, edge cases, architecture.
 - [docs/CONSENT_STORAGE.md](docs/CONSENT_STORAGE.md) — do I need a consent database? (short answer: no, but).
@@ -128,16 +128,16 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the full output shape, edge cases, and 
 - [x] Modularity contract
 - [x] Liability shields (LICENSE, DISCLAIMER, CONTRIBUTING, SECURITY, COLLABORATION + GitHub issue/PR templates)
 - [x] Core API + types
-- [x] Seed data: US, GB, DE, CA (incl. Quebec), AU
 - [x] ISO/IEC TS 27560:2023 audit-record serializer
 - [x] Vercel adapter
 - [x] Cloudflare Workers adapter
 - [x] Static + generic-header adapters
 - [x] Tests + CI
-- [ ] Seed data: FR, BR, IN, JP (next batch)
+- [x] **27 bundled countries** — US, GB, DE, CA (incl. Quebec), AU, FR, IT, ES, NL, BE (incl. German-speaking community), IE, AT, PL, SE, DK, CH, NO, JP, KR, SG, IN, NZ, BR, MX, AE, IL, ZA
+- [x] npm publish with verified provenance (OIDC trusted publisher)
+- [ ] Next batch (rest of EU + APAC + LatAm + MENA + Africa) as user demand surfaces — see [COLLABORATION.md](COLLABORATION.md)
 - [ ] Brevo integration
 - [ ] Resend integration
-- [ ] v0.1 publish to npm
 
 ## Contributing
 
