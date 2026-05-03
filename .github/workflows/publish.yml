@@ -23,14 +23,16 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      # Node 24 ships npm 11.x. Trusted Publishing without a manual
+      # OIDC exchange requires npm >= 11.5.1; Node 22 LTS ships npm
+      # 10.x and self-upgrading via `npm i -g npm@latest` has a known
+      # MODULE_NOT_FOUND bug, so we bump Node instead.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
           cache: npm
-      # Trusted Publishing without a manual OIDC exchange requires
-      # npm >= 11.5.1. Node 22 LTS ships with npm 10.x.
-      - run: npm install -g npm@latest
+      - run: node --version && npm --version
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
