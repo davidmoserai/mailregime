@@ -1,0 +1,26 @@
+# mailregime
+
+> Country-code → email-marketing-consent rules. Pure, offline, zero-dep TypeScript library that returns structured rules (single/double opt-in, checkbox required, consent language, audit-record schema) given (country, context, relationship). Not legal advice. Maintainers carry zero liability. The c15t for email instead of cookies.
+
+## Getting started
+
+- [README](https://github.com/davidmoserai/mailregime/blob/main/README.md): pitch, planned API, install, three-things-you-should-know disclaimer.
+- [Agent guide](https://github.com/davidmoserai/mailregime/blob/main/AGENTS.md): how AI coding agents should integrate mailregime in user codebases.
+- [Reference example](https://github.com/davidmoserai/mailregime/blob/main/examples/nextjs-route.ts): Next.js / edge-runtime handler.
+
+## Design and architecture
+
+- [DESIGN](https://github.com/davidmoserai/mailregime/blob/main/docs/DESIGN.md): full API, decision matrix per (country, context), edge cases, ISO 27560 alignment.
+- [MODULARITY](https://github.com/davidmoserai/mailregime/blob/main/docs/MODULARITY.md): versioning model, what each module guarantees, how to extend without a major bump, registerCountry().
+- [CONSENT_STORAGE](https://github.com/davidmoserai/mailregime/blob/main/docs/CONSENT_STORAGE.md): "do I need a consent DB" — short answer no, longer answer per jurisdiction.
+
+## Disclaimers and legal posture
+
+- [DISCLAIMER](https://github.com/davidmoserai/mailregime/blob/main/DISCLAIMER.md): AI-assisted authorship, no lawyer review, offline, bugs expected, best-effort weekly research with no timeliness promise.
+- [LICENSE](https://github.com/davidmoserai/mailregime/blob/main/LICENSE): MIT plus extensive additional disclaimer (no warranty, no professional relationship, waiver/covenant-not-to-sue).
+- [SECURITY](https://github.com/davidmoserai/mailregime/blob/main/SECURITY.md): scope, reporting, what's out of scope (legal correctness of bundled data).
+
+## Contributing
+
+- [CONTRIBUTING](https://github.com/davidmoserai/mailregime/blob/main/CONTRIBUTING.md): contributor terms, country-data PR format, primary-source citations required.
+- [COLLABORATION](https://github.com/davidmoserai/mailregime/blob/main/COLLABORATION.md): how lawyers, DPOs, regulator-staff, and developers can contribute corrections.

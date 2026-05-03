@@ -24,12 +24,47 @@ Full terms in [LICENSE](./LICENSE), [DISCLAIMER.md](./DISCLAIMER.md), [CONTRIBUT
 
 ## Status
 
-🚧 **Design + early implementation phase.** Public API is not stable. Do not use in production.
+`v0.1.0` — early. Public API may change in any minor version (standard 0.x contract). Pin a version, read diffs.
 
 - [docs/DESIGN.md](docs/DESIGN.md) — full API, decision matrix, edge cases, architecture.
 - [docs/CONSENT_STORAGE.md](docs/CONSENT_STORAGE.md) — do I need a consent database? (short answer: no, but).
 - [docs/MODULARITY.md](docs/MODULARITY.md) — what each module guarantees and how to extend without a major bump.
+- [AGENTS.md](AGENTS.md) — guidance for AI coding agents integrating mailregime.
+- [CHANGELOG.md](CHANGELOG.md) — release notes.
 - [DISCLAIMER.md](DISCLAIMER.md) — full disclaimer.
+
+## Install
+
+```bash
+npm install mailregime
+# or: pnpm add mailregime  /  yarn add mailregime  /  bun add mailregime
+```
+
+Zero runtime dependencies. ESM only. Edge-runtime safe.
+
+## Install with an AI agent
+
+If you use Claude Code, Cursor, Codex, Aider, Windsurf, or similar — paste this prompt:
+
+````markdown
+Install and wire up the `mailregime` library in this project.
+
+Steps:
+1. `npm install mailregime`
+2. Read https://github.com/davidmoserai/mailregime/blob/main/AGENTS.md for integration guidance.
+3. In every API route that collects an email for marketing purposes:
+   - import { getEmailRules } from "mailregime"
+   - import the matching adapter (vercel, cloudflare, or header)
+   - call getEmailRules({ country, region, context, relationship })
+   - branch on rules.canCollectForMarketing and rules.optIn
+   - persist rules.buildAuditRecord({...}) to whatever storage I already use
+4. Add `process.env.MAILREGIME_SILENCE_DISCLAIMER = "1"` in test files.
+5. Do NOT remove or modify any disclaimer language anywhere.
+6. mailregime is informational only, not legal advice — preserve that posture
+   in any code comments you add.
+````
+
+mailregime ships an [`AGENTS.md`](./AGENTS.md) and an [`llms.txt`](./llms.txt) so agents can fetch full context in one request.
 
 ## Why this exists
 
@@ -41,7 +76,7 @@ The result: every app that does email marketing across borders re-implements the
 
 `mailregime` aims to be the shared, citation-backed source of truth.
 
-## Planned shape
+## Quickstart
 
 ```ts
 import { getEmailRules } from "mailregime"

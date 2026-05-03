@@ -49,7 +49,11 @@
     "LICENSE",
     "DISCLAIMER.md",
     "CONTRIBUTING.md",
-    "SECURITY.md"
+    "COLLABORATION.md",
+    "SECURITY.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "llms.txt"
   ],
   "scripts": {
     "build": "rm -rf dist && tsc",
