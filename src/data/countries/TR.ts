@@ -90,13 +90,16 @@ export const TR: CountryData = {
   },
   byRelationship: {
     "existing-customer": {
-      // Law 6563 Art. 6 narrow carve-out: messages directly related
-      // to an existing product/service (e.g. service updates, change
-      // notices) may be sent without prior consent. Pure marketing
-      // of new products still requires IYS-registered consent.
-      softOptInAvailable: true,
-      softOptInScope: "similar-products",
-      requiresCallerSimilarityAssertion: true,
+      // Turkey has NO GDPR/PECR-style soft opt-in for marketing
+      // similar products. Law 6563 Art. 6(3) only carves out purely
+      // transactional/service messages about goods/services already
+      // delivered (use, maintenance, modifications) — that is handled
+      // via byContext.transactional. Any actual marketing message,
+      // even to an existing customer, requires IYS-registered express
+      // prior consent. See https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=6563&MevzuatTur=1&MevzuatTertip=5
+      softOptInAvailable: false,
+      softOptInScope: "none",
+      requiresCallerSimilarityAssertion: false,
     },
   },
 }

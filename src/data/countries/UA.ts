@@ -10,9 +10,11 @@ import type { CountryData } from "../../types.js"
 // Key bases:
 // - Law 2297-VI Art. 11: processing of personal data requires consent of
 //   the data subject (one of the listed legal grounds).
-// - Law on Advertising Art. 21: direct advertising via electronic means
-//   (telecom, including email) is prohibited without prior consent of the
-//   recipient; recipient must be able to refuse further mailings.
+// - Law on Advertising Art. 14-3: direct advertising via electronic means
+//   (telecom, including email) requires prior written consent (including in
+//   electronic form); recipient must be able to refuse further mailings free
+//   of charge at any time. Mass communications without prior consent are
+//   expressly prohibited.
 // - Civil Code of Ukraine: minors aged 14+ have partial civil capacity;
 //   below 14 ("malolitni") parental consent is required.
 //
@@ -24,16 +26,16 @@ export const UA: CountryData = {
   regime: "Law-2297-VI",
   defaults: {
     canCollectForMarketing: true,
-    // Law on Advertising Art. 21 — prior consent required for electronic
-    // direct advertising; Law 2297-VI Art. 11 — consent must be voluntary,
-    // informed, and documented (single express act).
+    // Law on Advertising Art. 14-3 — prior written consent (including
+    // electronic) required for electronic direct advertising; Law 2297-VI
+    // Art. 11 — consent must be voluntary, informed, and documented.
     optIn: "express",
     checkboxRequired: true,
     bundlingAllowed: false,
     prechecking: "forbidden",
     channels: ["email"],
-    // Recipient must be able to refuse further mailings at any time
-    // (Law on Advertising Art. 21(2)).
+    // Recipient must be able to refuse further mailings at any time, free of
+    // charge, in a simple form (Law on Advertising Art. 14-3).
     unsubscribeMechanism: "one-click",
     softOptInAvailable: false,
     softOptInScope: "none",
@@ -46,7 +48,7 @@ export const UA: CountryData = {
       regime: "none",
       conditions: [
         "Law 2297-VI covers natural persons; B2B role-based addresses out of scope",
-        "Law on Advertising Art. 21 still requires consent for electronic direct advertising",
+        "Law on Advertising Art. 14-3 still requires consent for electronic direct advertising",
       ],
     },
     // Ukrainian is the state language; consumer-facing communications and
@@ -61,7 +63,7 @@ export const UA: CountryData = {
       childrenBlocked: true,
     },
     preferenceCenter: { granularityRequired: "purpose", perEmailUnsubAlsoRequired: true },
-    // Sender identity + opt-out path required by Law on Advertising Art. 21
+    // Sender identity + opt-out path required by Law on Advertising Art. 14-3
     // (recipient must be able to identify advertiser and refuse).
     senderIdentity: {
       physicalAddressRequired: true,
@@ -76,7 +78,7 @@ export const UA: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "Law of Ukraine No. 2297-VI of 1 June 2010 'On Personal Data Protection' + Law of Ukraine No. 270/96-VR 'On Advertising' Art. 21",
+      statute: "Law of Ukraine No. 2297-VI of 1 June 2010 'On Personal Data Protection' + Law of Ukraine No. 270/96-VR 'On Advertising' Art. 14-3",
       url: "https://zakon.rada.gov.ua/laws/show/2297-17",
       jurisdiction: "UA",
       subRegime: "UA-2297",

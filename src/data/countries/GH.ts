@@ -6,25 +6,25 @@ import type { CountryData } from "../../types.js"
 // Protection Commission (DPC, dataprotection.org.gh).
 // - s. 20: requires consent / lawful basis for processing personal data.
 // - s. 22: children require parental consent (minor = under 18).
-// - s. 40: direct marketing — opt-out regime. A data controller may
-//   send direct marketing to a data subject who has been given prior
-//   notice and an opportunity to object; the data subject may object
-//   ("opt out") at any time, free of charge.
-// Because s. 40 is structured as opt-out (not prior express consent),
-// classification here is "single" opt-in with soft opt-out available.
+// - s. 40: direct marketing — opt-in regime. A data controller shall
+//   not use personal data for direct marketing purposes without the
+//   prior written consent of the data subject. The data subject may
+//   withdraw consent / object at any time, free of charge.
+// Because s. 40 requires prior written (express) consent, classification
+//   here is "express" opt-in. No soft opt-in carve-out exists in Act 843.
 export const GH: CountryData = {
   code: "GH",
   regime: "DPA-2012",
   defaults: {
     canCollectForMarketing: true,
-    optIn: "single",
-    checkboxRequired: false,
-    bundlingAllowed: true,
-    prechecking: "allowed",
+    optIn: "express",
+    checkboxRequired: true,
+    bundlingAllowed: false,
+    prechecking: "forbidden",
     channels: ["email"],
     unsubscribeMechanism: "one-click",
-    softOptInAvailable: true,
-    softOptInScope: "any",
+    softOptInAvailable: false,
+    softOptInScope: "none",
     requiresCallerSimilarityAssertion: false,
     impliedConsentTtlMonths: null,
     b2bExemption: {
@@ -63,16 +63,16 @@ export const GH: CountryData = {
       extraterritorialReach: true,
       lawyerAttestation: null,
     },
-    suggestedTemplate: "single-opt-in",
+    suggestedTemplate: "double-opt-in",
   },
   byContext: {
-    "lead-magnet": { canCollectForMarketing: true, optIn: "single", suggestedTemplate: "single-opt-in" },
+    "lead-magnet": { canCollectForMarketing: true, optIn: "express", suggestedTemplate: "double-opt-in" },
     transactional: { proofRequired: [] },
   },
   byRelationship: {
     "existing-customer": {
-      softOptInAvailable: true,
-      softOptInScope: "any",
+      softOptInAvailable: false,
+      softOptInScope: "none",
       requiresCallerSimilarityAssertion: false,
     },
   },

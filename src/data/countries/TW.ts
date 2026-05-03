@@ -2,12 +2,14 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// Taiwan Personal Data Protection Act (個人資料保護法, PDPA), last
-// substantive amendment 2023; subsidiary Enforcement Rules (個資法施行細則).
+// Taiwan Personal Data Protection Act (個人資料保護法, PDPA), most recent
+// amendment promulgated 11 November 2025 (effective date pending);
+// subsidiary Enforcement Rules (個資法施行細則, last amended 2 March 2016).
 // Regulator: Personal Data Protection Commission (PDPC, 個人資料保護
-// 委員會) — newly established 2025 as the unified competent authority;
-// prior to its operational stand-up the Ministry of Justice (MOJ) issued
-// interpretive guidance.
+// 委員會) — designated by the 2025 amendments as the unified competent
+// authority but remains in preparatory-office status as of 2026.
+// Sector-specific regulators (e.g. FSC) and the Ministry of Justice
+// continue to issue interpretive guidance pending full PDPC stand-up.
 //
 // Primary marketing rules:
 //   * PDPA Art. 5 — collection/processing/use must respect good faith
@@ -105,7 +107,7 @@ export const TW: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "Personal Data Protection Act (個人資料保護法, PDPA), promulgated 1995 as Computer-Processed Personal Data Protection Act, fully revised 2010, last amended 2023; Enforcement Rules of the Personal Data Protection Act (個人資料保護法施行細則)",
+      statute: "Personal Data Protection Act (個人資料保護法, PDPA), promulgated 1995 as Computer-Processed Personal Data Protection Act, fully revised 2010, most recently amended 11 November 2025 (effective date pending); Enforcement Rules of the Personal Data Protection Act (個人資料保護法施行細則, last amended 2 March 2016)",
       url: "https://law.moj.gov.tw/ENG/LawClass/LawAll.aspx?pcode=I0050021",
       jurisdiction: "TW",
       subRegime: "TW-PDPA",

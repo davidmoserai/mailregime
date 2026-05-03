@@ -9,18 +9,23 @@ import type { CountryData } from "../../types.js"
 // Key rules for direct marketing:
 // - DPA 2019 s. 30: lawful processing requires consent that is freely
 //   given, specific, informed and unambiguous (or another lawful basis).
-// - DPA 2019 s. 37: a data controller/processor who uses personal data
-//   for commercial purposes must obtain EXPRESS CONSENT from the data
-//   subject. Section 37(1)(b) provides a narrow existing-customer
-//   carve-out where the contact details were obtained in the context
-//   of a sale of similar products/services and the data subject is
-//   given a simple opt-out at the point of collection AND at every
-//   subsequent communication.
+// - DPA 2019 s. 37(1): a person shall not use personal data for
+//   commercial purposes unless (a) they have sought and obtained
+//   EXPRESS CONSENT from the data subject, or (b) they are authorised
+//   to do so under any other written law and the data subject has
+//   been informed of such use at collection. There is NO soft opt-in
+//   / similar-products / existing-customer carve-out under Kenyan law.
 // - DPA 2019 s. 33: processing of personal data of a child requires
-//   consent of a parent or guardian. Under Kenyan law (Children Act,
-//   Constitution Art. 260) a child is any person under 18.
-// - General Regulations 2021 reg. 13–16: detail consent quality,
-//   commercial use, opt-out mechanism and record-keeping.
+//   consent of a parent or guardian. The DPA does not define "child";
+//   Kenyan general law (Children Act 2022; Constitution Art. 260)
+//   defines a child as any person under 18.
+// - General Regulations 2021 reg. 13(2)(b): use of a child's personal
+//   data / profile for direct marketing is expressly prohibited.
+// - General Regulations 2021 reg. 15: direct marketing requires that
+//   data was collected from the data subject, the data subject was
+//   informed direct marketing was a purpose, the data subject has
+//   consented, a simple opt-out is provided, and the data subject
+//   has not opted out.
 export const KE: CountryData = {
   code: "KE",
   regime: "KE-DPA",
@@ -81,13 +86,5 @@ export const KE: CountryData = {
     "lead-magnet": { canCollectForMarketing: false, optIn: "blocked", suggestedTemplate: "blocked" },
     transactional: { proofRequired: [] },
   },
-  byRelationship: {
-    // s. 37(1)(b) existing-customer carve-out: similar products/services with simple opt-out
-    // at point of collection and at every subsequent contact.
-    "existing-customer": {
-      softOptInAvailable: true,
-      softOptInScope: "similar-products",
-      requiresCallerSimilarityAssertion: true,
-    },
-  },
+  byRelationship: {},
 }
