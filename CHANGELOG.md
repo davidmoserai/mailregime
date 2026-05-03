@@ -4,6 +4,15 @@ All notable changes to mailregime will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Note that **0.x releases may include breaking changes in any minor version** — this is the conventional pre-1.0 contract.
 
+## [0.3.2] - 2026-05-03
+
+### Added
+
+- **`routines/`** — scheduled-agent prompts for the weekly jurisdiction verification promised in [DISCLAIMER.md](DISCLAIMER.md). Set up via Claude Code `/schedule` against the maintainer's subscription (no API key needed). Master prompt spawns one general-purpose subagent per bundled country in parallel batches — clean context per country, scales as more are added, isolates per-country research failures. On findings: opens a PR labelled `legal-correction`. On clean: posts a commit comment.
+- **`routines/README.md`** — setup guide + the subagent pattern explained.
+
+[0.3.2]: https://github.com/davidmoserai/mailregime/releases/tag/v0.3.2
+
 ## [0.3.1] - 2026-05-03
 
 Audit-driven hardening of the v0.3.0 storage layer. No public API changes; safe upgrade.
