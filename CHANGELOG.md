@@ -4,6 +4,23 @@ All notable changes to mailregime will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Note that **0.x releases may include breaking changes in any minor version** — this is the conventional pre-1.0 contract.
 
+## [0.2.1] - 2026-05-03
+
+Verification pass on the original 5 countries (US, GB, DE, CA, AU) — same primary-source spot-check process applied to Tier-2 in v0.2.0. CA + AU verified clean. Three corrections applied:
+
+### Changed
+
+- **DE** — `basis.url` switched from third-party `gdpr-info.eu` to primary source `gesetze-im-internet.de/uwg_2004/__7.html`. Comment on `impliedConsentTtlMonths: 24` clarifies it's industry baseline, not statutory.
+- **GB** — header comment updated to reflect Data (Use and Access) Act 2025 (Royal Assent 19 June 2025): DUAA softens some GDPR-derived obligations, raises PECR fines to UK GDPR levels (£17.5m / 4%), adds a charity soft opt-in to PECR Reg 22 commencing early 2026. The `donor` relationship now grants soft opt-in. `dataResidency.crossBorderTransferMechanism` corrected from `"scc"` to `"idta"` (UK uses IDTA / UK Addendum to EU SCCs, not raw EU SCCs). `optIn: "double"` retained but documented as ICO best-practice / evidentiary standard, not statute.
+- **US** — header comment expanded to acknowledge the 2023-2026 wave of state privacy laws (TX TDPSA, OR OCPA, MT MCDPA, TN TIPA, DE DPDPA, IA, NH, NJ, MN, MD MODPA, RI, IN, KY) plus the California Delete Act / DROP (operative 1 Aug 2026). Comment on `consentRecordRetentionMonths: 60` clarifies it's a maintainer heuristic, not a CAN-SPAM rule.
+- **types.ts** — `dataResidency.crossBorderTransferMechanism` enum widened with `"idta"` for UK transfers.
+
+### Why this matters
+
+The verification pass against primary sources caught real currency drift — the same kind of drift that v0.2.0's pass caught in the new 22 countries (BR fabricated laws, MX 2025 reform, KR repealed re-consent rule). Now all 27 bundled countries have been spot-checked.
+
+[0.2.1]: https://github.com/davidmoserai/mailregime/releases/tag/v0.2.1
+
 ## [0.2.0] - 2026-05-03
 
 ### Added — enricher pattern

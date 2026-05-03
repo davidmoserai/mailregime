@@ -105,10 +105,12 @@ export type EmailRulesData = {
     // Mechanism the SENDING jurisdiction requires for outbound personal
     // data transfers. "none-required" means the local law does not gate
     // outbound transfers; "explicit-consent" means data subjects must
-    // explicitly opt in to the transfer.
+    // explicitly opt in to the transfer; "idta" is the UK's
+    // International Data Transfer Agreement (or UK Addendum to EU SCCs).
     crossBorderTransferMechanism:
       | "none-required"
       | "scc"
+      | "idta"
       | "adequacy"
       | "explicit-consent"
       | "blocked"

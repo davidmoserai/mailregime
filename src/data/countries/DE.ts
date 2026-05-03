@@ -57,7 +57,7 @@ export const DE: CountryData = {
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
       statute: "GDPR Art. 6(1)(a) + Art. 7 + UWG §7 Abs. 2 Nr. 3",
-      url: "https://gdpr-info.eu/art-6-gdpr/",
+      url: "https://www.gesetze-im-internet.de/uwg_2004/__7.html",
       jurisdiction: "EU",
       subRegime: "DE-UWG",
       dataLastUpdated: "2026-05-03",

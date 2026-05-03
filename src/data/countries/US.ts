@@ -5,9 +5,14 @@ import type { CountryData } from "../../types.js"
 // statutes. It may be wrong, out of date, or inapplicable to your facts.
 // You must consult qualified counsel before relying on it.
 //
-// CAN-SPAM: opt-out regime. Federal. State privacy laws (CCPA/CPRA, VCDPA,
-// CPA, CTDPA, UCPA, TX TDPSA, OR OCPA, MT MCDPA, TN TIPA, DE DPDPA) layer
-// additional rights but don't change the email-marketing consent baseline.
+// CAN-SPAM: opt-out regime. Federal. State privacy laws (live or coming
+// online 2023-2026: CA CCPA/CPRA + Delete Act/DROP, VA VCDPA, CO CPA,
+// CT CTDPA, UT UCPA, TX TDPSA, OR OCPA, MT MCDPA, TN TIPA, DE DPDPA,
+// IA, NH, NJ, MN, MD MODPA, RI, IN, KY) layer additional data-subject
+// rights (right to know / delete / opt out of sale & sharing) but
+// don't change the email-marketing consent baseline. Callers needing
+// state-level subRegime granularity should pass the ISO 3166-2
+// region (e.g. "US-CA"); see byRegion for shipped overrides.
 export const US: CountryData = {
   code: "US",
   regime: "CAN-SPAM",
@@ -29,6 +34,8 @@ export const US: CountryData = {
       storageRegion: "any",
       crossBorderTransferMechanism: "none-required",
     },
+    // No binding CAN-SPAM retention rule; FTC compliance guide silent.
+    // 60mo is a maintainer heuristic for audit defensibility, not statute.
     consentRecordRetentionMonths: 60,
     sensitiveDataFlags: {
       healthMarketingBlocked: false,
@@ -78,7 +85,7 @@ export const US: CountryData = {
     "US-CA": {
       basis: {
         statute:
-          "CAN-SPAM + CCPA/CPRA (Cal. Civ. Code §§ 1798.100 et seq.)",
+          "CAN-SPAM + CCPA/CPRA (Cal. Civ. Code §§ 1798.100 et seq.) + California Delete Act / DROP (SB 362, broker-deletion mechanism operative 1 Aug 2026)",
         url: "https://oag.ca.gov/privacy/ccpa",
         jurisdiction: "US",
         subRegime: "US-CA-CCPA",
