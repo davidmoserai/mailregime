@@ -92,6 +92,37 @@ test("fromRow — returns the JSONB receipt verbatim", async () => {
   assert.equal(restored.consentId, record.consentId)
 })
 
+test("toRow — addMonths month-end rollover (Jan 31 + 1mo → Mar 3)", async () => {
+  const rules = getEmailRules({ country: "US", context: "newsletter-signup", relationship: "none" })
+  // Hand-craft a captured_at on Jan 31 to exercise rollover. We can't
+  // easily set capturedAt on a real buildAuditRecord, so build a record
+  // and post-process for this specific test.
+  const record = await rules.buildAuditRecord({
+    ip: null, userAgent: null, sourceUrl: "x", wording: "ok", formVersion: "v1",
+  })
+  const jan31 = new Date(Date.UTC(2026, 0, 31, 12, 0, 0))
+  const patched = { ...record, capturedAt: jan31.toISOString() }
+  const row = toRow(patched, { consentRecordRetentionMonths: 1 })
+  // JS rolls over: Jan 31 + 1mo → Mar 3 (Feb 31 doesn't exist).
+  // Documented behaviour; this test pins it.
+  assert.equal(row.delete_after.getUTCMonth(), 2) // March = 2
+  assert.equal(row.delete_after.getUTCDate(), 3)
+})
+
+test("toRow — addMonths leap year (Feb 29 + 12mo → Mar 1)", async () => {
+  const rules = getEmailRules({ country: "US", context: "newsletter-signup", relationship: "none" })
+  const record = await rules.buildAuditRecord({
+    ip: null, userAgent: null, sourceUrl: "x", wording: "ok", formVersion: "v1",
+  })
+  const feb29 = new Date(Date.UTC(2024, 1, 29, 12, 0, 0)) // 2024 is a leap year
+  const patched = { ...record, capturedAt: feb29.toISOString() }
+  const row = toRow(patched, { consentRecordRetentionMonths: 12 })
+  // Feb 29 + 12mo → Feb 29 of 2025 doesn't exist → Mar 1 2025
+  assert.equal(row.delete_after.getUTCFullYear(), 2025)
+  assert.equal(row.delete_after.getUTCMonth(), 2)
+  assert.equal(row.delete_after.getUTCDate(), 1)
+})
+
 test("toRow — round-trips through fromRow without mutation", async () => {
   const rules = getEmailRules({
     country: "BE",

@@ -85,24 +85,26 @@ export async function runInit(_argv: string[]): Promise<void> {
   await fs.mkdir(join(OUT_DIR, "migrations"), { recursive: true })
 
   const written: string[] = []
+  const skipped: string[] = []
 
   // Always copy the canonical SQL — useful even for ORM users for
   // tooling that operates at the DDL layer (atlas, sqitch, raw psql).
   const sqlFile = join(SCHEMAS_DIR, sqlFlavor as SqlFlavor, "0001_init.sql")
   const sqlOut = join(OUT_DIR, "migrations", "0001_init.sql")
-  await copyIfMissing(sqlFile, sqlOut, written)
+  await copyIfMissing(sqlFile, sqlOut, written, skipped)
 
   // ORM-specific template
   if (ormTemplate === "drizzle") {
-    await copyIfMissing(join(SCHEMAS_DIR, "drizzle", "schema.ts"), join(OUT_DIR, "schema.ts"), written)
+    await copyIfMissing(join(SCHEMAS_DIR, "drizzle", "schema.ts"), join(OUT_DIR, "schema.ts"), written, skipped)
   } else if (ormTemplate === "prisma") {
-    await copyIfMissing(join(SCHEMAS_DIR, "prisma", "schema.prisma"), join(OUT_DIR, "schema.prisma"), written)
+    await copyIfMissing(join(SCHEMAS_DIR, "prisma", "schema.prisma"), join(OUT_DIR, "schema.prisma"), written, skipped)
   } else if (ormTemplate === "kysely") {
-    await copyIfMissing(join(SCHEMAS_DIR, "kysely", "types.ts"), join(OUT_DIR, "types.ts"), written)
+    await copyIfMissing(join(SCHEMAS_DIR, "kysely", "types.ts"), join(OUT_DIR, "types.ts"), written, skipped)
   }
 
   spin.stop(`Wrote ${written.length} file${written.length === 1 ? "" : "s"} to ${OUT_DIR}/`)
   for (const f of written) p.log.info(`  ${f}`)
+  for (const f of skipped) p.log.warn(`  ${f} already exists — kept your version (delete it to regenerate)`)
 
   if (connectionString) {
     spin.start("Applying migration")
@@ -123,9 +125,15 @@ export async function runInit(_argv: string[]): Promise<void> {
   p.outro("Done.")
 }
 
-async function copyIfMissing(src: string, dest: string, written: string[]): Promise<void> {
+async function copyIfMissing(
+  src: string,
+  dest: string,
+  written: string[],
+  skipped: string[],
+): Promise<void> {
   try {
     await fs.access(dest)
+    skipped.push(dest)
     return
   } catch {
     /* not present, copy */

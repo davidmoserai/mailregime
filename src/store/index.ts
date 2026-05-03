@@ -43,8 +43,14 @@ export type ConsentReceiptRow = {
  * Convert an AuditRecord to a row ready for INSERT. `retentionMonths`
  * comes from the EmailRulesData `consentRecordRetentionMonths` field
  * — pass the rules object the receipt was built from. `delete_after`
- * is computed at this point so retention sweeps are a single indexed
- * DELETE.
+ * is computed at this point and FROZEN — if a country later extends
+ * its retention rule, existing rows still expire on their original
+ * delete_after. Callers who interpret retention as "longest-applicable
+ * rule, recomputed on rule changes" should run an UPDATE batch when
+ * they update mailregime — that's a deliberate caller choice, not a
+ * library default.
+ *
+ * Retention sweeps are a single indexed DELETE because of this column.
  */
 export function toRow(
   record: AuditRecord,
@@ -84,9 +90,13 @@ export function fromRow(row: ConsentReceiptRow): AuditRecord {
   return row.receipt
 }
 
-// Plain calendar-month addition. Postgres months differ from
-// 30-day approximations; we let SQL operate on the Date and store the
-// result as a precise timestamp.
+// Plain calendar-month addition. Uses JavaScript's Date.setUTCMonth,
+// which rolls over on month-end overflow: e.g. Jan 31 + 1 month →
+// Mar 3 (because Feb 31 doesn't exist, JS adds the extra days). For
+// retention this can shift delete_after by up to 3 days at month
+// boundaries — be aware when reading delete_after values, and consult
+// your own counsel if your retention regime requires day-precise
+// expiry.
 function addMonths(date: Date, months: number): Date {
   const out = new Date(date.getTime())
   out.setUTCMonth(out.getUTCMonth() + months)

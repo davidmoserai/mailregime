@@ -11,9 +11,12 @@
 import type { AuditRecord, EmailRulesData } from "../types.js"
 import { toRow, type ConsentReceiptRow } from "./index.js"
 
-// Inline migration SQL — kept here so the class is fully usable from
-// `npm install` without users having to copy schema files. Mirrors
-// schemas/postgres/0001_init.sql 1:1.
+// Inline migration SQL — kept here so the class is fully usable
+// without users having to copy schema files. Mirrors
+// schemas/postgres/0001_init.sql, but EXCLUDES the trailing INSERT
+// into mailregime_migrations — that's done by migrate() itself
+// inside the advisory-lock-protected loop below to avoid double
+// bookkeeping when both the inline SQL and the loop track state.
 const MIGRATIONS: ReadonlyArray<{ id: string; sql: string }> = [
   {
     id: "0001_init",
@@ -46,13 +49,14 @@ CREATE INDEX IF NOT EXISTS idx_mr_delete_after  ON mailregime_consent_receipts (
 CREATE INDEX IF NOT EXISTS idx_mr_country       ON mailregime_consent_receipts (country, region);
 CREATE INDEX IF NOT EXISTS idx_mr_withdrawn     ON mailregime_consent_receipts (withdrawn_at)
   WHERE withdrawn_at IS NOT NULL;
-CREATE TABLE IF NOT EXISTS mailregime_migrations (
-  id          TEXT        PRIMARY KEY,
-  applied_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
 `,
   },
 ] as const
+
+// Stable advisory-lock key derived from the project name. Two booting
+// processes will serialise on this lock, so only one runs migrations
+// at a time — the second sees the bookkeeping rows and no-ops.
+const ADVISORY_LOCK_KEY = 0x6d_61_69_6c_72 // "mailr"
 
 // Minimal subset of postgres.js Sql interface. Declared as a type so
 // we can avoid importing the runtime `postgres` package eagerly — keeps
@@ -96,19 +100,45 @@ export class PostgresStore {
     }
   }
 
-  /** Apply pending migrations idempotently. Call once on app boot. */
+  /**
+   * Apply pending migrations idempotently and race-safely.
+   *
+   * Uses a transaction-scoped Postgres advisory lock so two app
+   * instances booting simultaneously serialise on the migration
+   * step. The bookkeeping table is created outside the lock (idempotent
+   * `CREATE TABLE IF NOT EXISTS`); the per-migration loop inside the
+   * lock checks bookkeeping before running each script, so concurrent
+   * boots can't double-apply.
+   *
+   * Safe to call on every app boot — already-applied migrations no-op.
+   */
   async migrate(): Promise<{ applied: string[] }> {
     const sql = await this.sqlPromise
-    await sql.unsafe(MIGRATIONS[0]!.sql)
-    const existing = (await sql`SELECT id FROM mailregime_migrations`) as Array<{ id: string }>
-    const have = new Set(existing.map((r) => r.id))
+
+    // Bookkeeping table first — guaranteed idempotent.
+    await sql.unsafe(`
+      CREATE TABLE IF NOT EXISTS mailregime_migrations (
+        id          TEXT        PRIMARY KEY,
+        applied_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `)
+
     const applied: string[] = []
-    for (const m of MIGRATIONS) {
-      if (have.has(m.id)) continue
-      await sql.unsafe(m.sql)
-      await sql`INSERT INTO mailregime_migrations (id) VALUES (${m.id}) ON CONFLICT (id) DO NOTHING`
-      applied.push(m.id)
-    }
+    await sql.begin(async (tx) => {
+      // Serialise concurrent migrators on this key.
+      await tx.unsafe(`SELECT pg_advisory_xact_lock(${ADVISORY_LOCK_KEY})`)
+
+      const existing = (await tx`SELECT id FROM mailregime_migrations`) as Array<{ id: string }>
+      const have = new Set(existing.map((r) => r.id))
+
+      for (const m of MIGRATIONS) {
+        if (have.has(m.id)) continue
+        await tx.unsafe(m.sql)
+        await tx`INSERT INTO mailregime_migrations (id) VALUES (${m.id}) ON CONFLICT (id) DO NOTHING`
+        applied.push(m.id)
+      }
+    })
+
     return { applied }
   }
 
@@ -143,8 +173,19 @@ export class PostgresStore {
   /**
    * Find all receipts for a subject — GDPR Art. 15 access-request helper.
    * Returns receipts in capture order (oldest first).
+   *
+   * Anonymous receipts (subject_id IS NULL) cannot be looked up here.
+   * That's correct GDPR behaviour — without a subject identifier, you
+   * cannot identify "which records belong to this person." Pass an
+   * explicit subjectId; mailregime rejects empty strings to prevent
+   * accidental "give me all rows" calls.
    */
   async findBySubject(subjectId: string): Promise<AuditRecord[]> {
+    if (typeof subjectId !== "string" || subjectId.trim().length === 0) {
+      throw new Error(
+        "findBySubject requires a non-empty subjectId. Anonymous receipts cannot be queried by subject.",
+      )
+    }
     const sql = await this.sqlPromise
     const rows = (await sql`
       SELECT receipt FROM mailregime_consent_receipts
@@ -154,7 +195,14 @@ export class PostgresStore {
     return rows.map((r) => r.receipt)
   }
 
-  /** Mark withdrawn — keeps row until original `delete_after`. */
+  /**
+   * Mark a receipt as withdrawn. Keeps the row in place until its
+   * original `delete_after` so the consent record remains as proof
+   * of past consent under legitimate-interest basis (ICO/CNIL aligned).
+   *
+   * NOT a substitute for `purgeOnWithdrawal` — they apply different
+   * Art. 17 interpretations and shouldn't be chained on the same row.
+   */
   async withdraw(consentId: string, method: string): Promise<void> {
     const sql = await this.sqlPromise
     await sql`
@@ -165,9 +213,11 @@ export class PostgresStore {
   }
 
   /**
-   * Strict-erasure withdrawal — advances `delete_after` to NOW() so the
-   * next sweep removes the row. Use for callers who interpret Art. 17
-   * as requiring immediate deletion.
+   * Strict-erasure withdrawal — supersets `withdraw` and additionally
+   * advances `delete_after` to NOW(), so the next `sweep()` removes
+   * the row. Use for callers interpreting Art. 17 as requiring
+   * immediate deletion. Don't call this AND `withdraw()` on the same
+   * row — `purgeOnWithdrawal` already records the withdrawal.
    */
   async purgeOnWithdrawal(consentId: string, method: string): Promise<void> {
     const sql = await this.sqlPromise
@@ -178,12 +228,23 @@ export class PostgresStore {
     `
   }
 
-  /** Delete receipts past their delete_after. Run on a cron. */
-  async sweep(): Promise<{ deleted: number }> {
+  /**
+   * Delete receipts past their delete_after. Run on a daily cron.
+   *
+   * Bounded by `limit` (default 10,000) to avoid huge transactions
+   * locking the table. If exactly `limit` rows are deleted, more may
+   * remain — call again until `deleted < limit`.
+   */
+  async sweep(opts: { limit?: number } = {}): Promise<{ deleted: number }> {
     const sql = await this.sqlPromise
+    const limit = opts.limit ?? 10_000
     const rows = (await sql`
       DELETE FROM mailregime_consent_receipts
-      WHERE delete_after < NOW()
+      WHERE consent_id IN (
+        SELECT consent_id FROM mailregime_consent_receipts
+        WHERE delete_after < NOW()
+        LIMIT ${limit}
+      )
       RETURNING consent_id
     `) as Array<{ consent_id: string }>
     return { deleted: rows.length }

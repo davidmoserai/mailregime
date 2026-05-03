@@ -4,6 +4,27 @@ All notable changes to mailregime will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Note that **0.x releases may include breaking changes in any minor version** — this is the conventional pre-1.0 contract.
 
+## [0.3.1] - 2026-05-03
+
+Audit-driven hardening of the v0.3.0 storage layer. No public API changes; safe upgrade.
+
+### Fixed
+
+- **`PostgresStore.migrate()` race + idempotency** — wraps the per-migration apply loop in a transaction with `pg_advisory_xact_lock` so concurrent app boots serialise on the migration step. Bookkeeping table is created outside the lock with `CREATE TABLE IF NOT EXISTS`. Inline SQL no longer self-bookkeeps; the loop owns it. Reconciled the inline SQL with the canonical `schemas/postgres/0001_init.sql` so the two paths produce identical schema.
+- **`PostgresStore.sweep()`** — now bounded by `{ limit }` (default 10,000) using a `consent_id IN (SELECT … LIMIT n)` subquery to avoid huge transactions locking the table. Call again until `deleted < limit`.
+- **`PostgresStore.findBySubject()`** — now rejects empty / whitespace-only `subjectId` rather than silently returning all anonymous (NULL) receipts. Matches GDPR Art. 15 semantics: anonymous receipts cannot be queried by subject.
+- **`PostgresStore.withdraw()` / `purgeOnWithdrawal()`** — JSDoc clarifies they apply different Art. 17 interpretations and shouldn't be chained on the same row.
+- **`toRow()` JSDoc** — explicitly documents that `delete_after` is FROZEN at insert time. If a country later extends its retention rule, callers wanting "longest applicable retention" semantics must run their own UPDATE batch.
+- **`addMonths()` comment** — clarified JS Date month-end rollover behaviour (Jan 31 + 1 month → Mar 3); softened editorial wording.
+- **CLI `init`** — now warns when an existing template file is skipped instead of silently skipping.
+- **Schema-divergence test** — new `tests/schema-divergence.test.ts` asserts the inline migration SQL in `src/store/postgres.ts` matches `schemas/postgres/0001_init.sql`. Prevents silent drift if a maintainer edits one and forgets the other.
+
+### Tests
+
+53/53 pass (was 50). Added 5 store tests (round-trip, leap-year, month-end), 1 schema-divergence test. Deep end-to-end exercise of every public surface (44/44) against a fresh install from the package tarball.
+
+[0.3.1]: https://github.com/davidmoserai/mailregime/releases/tag/v0.3.1
+
 ## [0.3.0] - 2026-05-03
 
 ### Added — self-host consent-receipt storage

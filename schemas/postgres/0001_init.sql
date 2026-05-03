@@ -44,11 +44,14 @@ CREATE INDEX IF NOT EXISTS idx_mr_withdrawn     ON mailregime_consent_receipts (
   WHERE withdrawn_at IS NOT NULL;
 
 -- Bookkeeping table — tracks which migrations have been applied.
--- PostgresStore.migrate() reads this to skip already-applied scripts.
+-- PostgresStore.migrate() reads this to skip already-applied scripts;
+-- users applying this SQL with their own tooling (drizzle-kit, prisma
+-- migrate, atlas, raw psql) should manually mark the migration as
+-- applied so the runtime store doesn't re-execute it on first boot:
+--
+--   INSERT INTO mailregime_migrations (id) VALUES ('0001_init')
+--   ON CONFLICT (id) DO NOTHING;
 CREATE TABLE IF NOT EXISTS mailregime_migrations (
   id          TEXT        PRIMARY KEY,
   applied_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
-INSERT INTO mailregime_migrations (id) VALUES ('0001_init')
-ON CONFLICT (id) DO NOTHING;
