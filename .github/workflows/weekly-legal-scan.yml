@@ -1,0 +1,87 @@
+name: Weekly legal-data scan
+
+# AI-assisted legal-research routine. Promised in DISCLAIMER.md as
+# "best-effort, no timeliness promise." Runs Claude Code against the
+# bundled country data, scans for changes in the relevant statutes,
+# and opens a PR with proposed updates + citations.
+#
+# Cost: a few cents to a few dollars per run (Anthropic API). Disable
+# in repo settings → Actions if you want to pause.
+#
+# Setup:
+#   1. Get an Anthropic API key at https://console.anthropic.com
+#   2. Repo Settings → Secrets and variables → Actions → New secret
+#      Name: ANTHROPIC_API_KEY
+#      Value: <your key>
+#   3. Push. The cron fires every Monday 09:00 UTC.
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"  # Monday 09:00 UTC
+  workflow_dispatch:      # Allow manual runs from the Actions tab
+
+permissions:
+  contents: write          # to push the proposal branch
+  pull-requests: write     # to open the PR
+  id-token: write          # for OIDC if Claude action uses it
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Claude Code legal scan
+        uses: anthropics/claude-code-action@v0
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            You are running mailregime's weekly legal-data refresh routine.
+
+            Scope: src/data/countries/*.ts (currently US, GB, DE, CA, AU)
+
+            For each country file, check whether any of the following has
+            changed since its `dataLastUpdated` field:
+
+              • The cited primary statute (CAN-SPAM, UK GDPR + PECR + DUAA,
+                GDPR + UWG, CASL + PIPEDA + Quebec Law 25 + Bill 96, Spam
+                Act 2003).
+              • Material regulator guidance (FTC, ICO, CNIL, BfDI, OPC,
+                CRTC, CAI Quebec, OAIC, ACMA).
+              • Court rulings affecting any field in EmailRulesData (e.g.
+                opt-in mechanic, soft opt-in scope, B2B exemption, child
+                age of consent, language requirement).
+              • New ISO 3166-2 region overrides worth adding.
+
+            For every confirmed change you find:
+              1. Update the relevant src/data/countries/*.ts file.
+              2. Bump the `dataLastUpdated` field on that record.
+              3. In the PR description, include for each change:
+                 - the field path (e.g. `byContext.lead-magnet.optIn`)
+                 - the from → to value
+                 - a primary-source citation with URL
+                 - a one-sentence rationale
+                 - any unsettled-law caveat
+
+            HARD RULES:
+              • Primary sources only — no blog posts, no marketing pages,
+                no AI-generated summaries as citations.
+              • Do NOT remove or weaken any disclaimer language anywhere.
+              • Do NOT change `confidence` higher than "medium" without a
+                lawyer attestation.
+              • If you find no material changes, open NO PR and post a
+                short comment to the most recent commit summarising what
+                you checked and concluded.
+              • Read AGENTS.md and CONTRIBUTING.md before making any edit.
+
+            Open the PR against `main` with title:
+              "weekly: legal-data scan YYYY-MM-DD"
+            and label `legal-correction`.
+
+          # Allow the model to run git, gh, and a small set of read-only
+          # web-research tools. No npm publish, no destructive commands.
+          allowed_tools: >-
+            Read,Edit,Glob,Grep,WebFetch,WebSearch,
+            Bash(git status),Bash(git diff),Bash(git add *),
+            Bash(git commit *),Bash(git push *),Bash(git checkout *),
+            Bash(gh pr create *),Bash(gh pr edit *)
