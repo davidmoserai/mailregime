@@ -1,10 +1,10 @@
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
 // Reference shape for a Next.js / edge-runtime POST handler that uses
-// m24t to gate email collection. NOT a complete app — illustrative only.
+// mailregime to gate email collection. NOT a complete app — illustrative only.
 
-import { getEmailRules } from "m24t"
-import { fromVercelRequest } from "m24t/adapters/vercel"
+import { getEmailRules } from "mailregime"
+import { fromVercelRequest } from "mailregime/adapters/vercel"
 
 type Body = { email: string; marketingOptIn?: boolean }
 
@@ -48,7 +48,7 @@ export async function POST(request: Request): Promise<Response> {
   })
 
   // Persist `record` wherever you keep audit trails (R2, S3, Postgres, ...).
-  // m24t never opens a connection — storage is your problem.
+  // mailregime never opens a connection — storage is your problem.
   void record
 
   return Response.json({ ok: true, addedToList: true })

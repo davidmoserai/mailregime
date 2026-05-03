@@ -25,7 +25,7 @@ If you do not accept these terms, do not submit a contribution.
 
 - Removal of the LICENSE, DISCLAIMER, or any disclaimer text.
 - Marketing claims about correctness, compliance, or fitness for purpose.
-- Statements that imply m24t is a substitute for legal advice.
+- Statements that imply mailregime is a substitute for legal advice.
 - Country data without citations.
 - Country data citing only secondary sources (blog posts, marketing pages, ChatGPT output) — primary sources only.
 

@@ -1,8 +1,8 @@
-# m24t — Design
+# mailregime — Design
 
 > Working design doc.
 >
-> **⚠ Read the [DISCLAIMER](../DISCLAIMER.md) before relying on anything in this document.** m24t is informational only, not legal advice. Maintainers carry zero liability.
+> **⚠ Read the [DISCLAIMER](../DISCLAIMER.md) before relying on anything in this document.** mailregime is informational only, not legal advice. Maintainers carry zero liability.
 >
 > **Companion docs:** [CONSENT_STORAGE.md](./CONSENT_STORAGE.md) (do I need a consent DB?), [MODULARITY.md](./MODULARITY.md) (how to extend without a major version bump).
 
@@ -139,7 +139,7 @@ Country alone isn't enough. `(country, context, relationship)` is the minimum vi
 
 ```
                     ┌─────────────────────────────────────────┐
-                    │         m24t (core, ~5kb gzipped)       │
+                    │         mailregime (core, ~5kb gzipped)       │
                     │                                          │
                     │   getEmailRules({                        │
                     │     country, region?, context,           │
@@ -155,7 +155,7 @@ Country alone isn't enough. `(country, context, relationship)` is the minimum vi
                 │                      │                      │
                 ▼                      ▼                      ▼
    ┌──────────────────────┐ ┌───────────────────┐ ┌──────────────────────┐
-   │ m24t/data            │ │ m24t/adapters/*   │ │ m24t/integrations/*  │
+   │ mailregime/data            │ │ mailregime/adapters/*   │ │ mailregime/integrations/*  │
    │                      │ │                   │ │ (planned)            │
    │ TS files, one per    │ │ Detect country    │ │                      │
    │ jurisdiction. Tree-  │ │ from request:     │ │ ESP plug-ins:        │
@@ -175,7 +175,7 @@ Country alone isn't enough. `(country, context, relationship)` is the minimum vi
                                        │
                                        ▼
                     ┌─────────────────────────────────────────┐
-                    │       m24t/audit (optional)             │
+                    │       mailregime/audit (optional)             │
                     │                                          │
                     │   buildAuditRecord(...) → AuditRecord    │
                     │   serializeISO27560(record) → JSON       │
@@ -284,7 +284,7 @@ type EmailRules = {
 
 ```ts
 type AuditRecord = {
-  schemaVersion: "m24t/1"                 // m24t schema version
+  schemaVersion: "mailregime/1"                 // mailregime schema version
   iso27560Version: "1.0"                  // Kantara consent receipt version
   consentId: string                       // ULID
   subjectId: string                       // hashed email or pseudonymous ID
@@ -354,8 +354,8 @@ When `getEmailRules` is called with `country: null`, the configured policy decid
 1. **Data format**: TS for both types and data (with a `consentDataVersion` independent of library SemVer) — picked over JSON-with-a-build-step to keep authoring strongly typed at compile time. Mirrors how `tzdata` decouples from libc.
 2. **US states**: full first-class jurisdictions, accepted via optional `region: ISO3166-2` input. Layered `subRegimes` on output.
 3. **PECR similar-products**: expose both `softOptInScope: "similar-products"` and `requiresCallerSimilarityAssertion: true` so the API forces the developer to confirm fact-specific similarity.
-4. **Integrations packaging**: sub-paths (`m24t/integrations/brevo`) over separate npm packages. Version coupling is a feature for consent-data correctness.
-5. **Region-only tree-shaking**: ship per-country JSON imports for apps that operate in N markets, e.g. `import { US, GB, DE } from "m24t/data/countries"`.
+4. **Integrations packaging**: sub-paths (`mailregime/integrations/brevo`) over separate npm packages. Version coupling is a feature for consent-data correctness.
+5. **Region-only tree-shaking**: ship per-country JSON imports for apps that operate in N markets, e.g. `import { US, GB, DE } from "mailregime/data/countries"`.
 
 ## Non-goals (reiterated)
 
@@ -363,4 +363,4 @@ When `getEmailRules` is called with `country: null`, the configured policy decid
 - **Not a consent UI library.** Bring your own checkbox.
 - **Not an ESP wrapper.** Integrations are thin adapters; the ESP does the sending.
 - **Not a cookie banner.** That's c15t.
-- **Not a consent database.** See [CONSENT_STORAGE.md](./CONSENT_STORAGE.md). m24t is stateless and never opens a connection to anything.
+- **Not a consent database.** See [CONSENT_STORAGE.md](./CONSENT_STORAGE.md). mailregime is stateless and never opens a connection to anything.

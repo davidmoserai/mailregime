@@ -1,6 +1,6 @@
 {
-  "name": "m24t",
-  "version": "0.0.1",
+  "name": "mailregime",
+  "version": "0.1.0",
   "description": "Country code → email-marketing-consent rules. Informational only, not legal advice.",
   "type": "module",
   "main": "./dist/index.js",
@@ -75,12 +75,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/davidmoserai/m24t.git"
+    "url": "https://github.com/davidmoserai/mailregime.git"
   },
   "bugs": {
-    "url": "https://github.com/davidmoserai/m24t/issues"
+    "url": "https://github.com/davidmoserai/mailregime/issues"
   },
-  "homepage": "https://github.com/davidmoserai/m24t#readme",
+  "homepage": "https://github.com/davidmoserai/mailregime#readme",
   "engines": {
     "node": ">=18"
   },

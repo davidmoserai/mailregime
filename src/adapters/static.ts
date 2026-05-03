@@ -18,7 +18,7 @@ export function fromStatic(
 }
 
 // Priority-ordered fold over multiple detections — last non-null wins.
-// m24t does NOT encode "which country is stricter" (that requires
+// mailregime does NOT encode "which country is stricter" (that requires
 // regime-level reasoning the library doesn't have at the detection
 // layer). Callers pass detections in priority order, most-authoritative
 // last (typically: header < self-declared < billing).

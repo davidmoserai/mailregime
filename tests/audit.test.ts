@@ -2,7 +2,7 @@ import { test } from "node:test"
 import assert from "node:assert/strict"
 import { getEmailRules, redactReceipt, serializeISO27560 } from "../src/index.js"
 
-process.env["M24T_SILENCE_DISCLAIMER"] = "1"
+process.env["MAILREGIME_SILENCE_DISCLAIMER"] = "1"
 
 test("buildAuditRecord — populates ISO 27560 superset", async () => {
   const rules = getEmailRules({
@@ -18,7 +18,7 @@ test("buildAuditRecord — populates ISO 27560 superset", async () => {
     formVersion: "v3",
     subjectId: "sha256:abc",
   })
-  assert.equal(record.schemaVersion, "m24t/1")
+  assert.equal(record.schemaVersion, "mailregime/1")
   assert.equal(record.iso27560Version, "1.0")
   assert.match(record.consentId, /^[0-9A-Z]{26}$/)
   assert.equal(record.subjectId, "sha256:abc")

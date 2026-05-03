@@ -16,7 +16,7 @@ export const BUNDLED_COUNTRIES: ReadonlyArray<CountryData> = [
 ]
 
 // Static map for bundled countries. Apps that want tree-shaking import
-// from `m24t/data/countries/<code>` directly and call `registerCountry`.
+// from `mailregime/data/countries/<code>` directly and call `registerCountry`.
 const bundled = new Map<string, CountryData>()
 for (const c of BUNDLED_COUNTRIES) bundled.set(c.code, c)
 

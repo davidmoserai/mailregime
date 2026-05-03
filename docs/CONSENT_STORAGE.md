@@ -2,7 +2,7 @@
 
 **Short answer:** No. But "the ESP keeps the record" is materially weaker than "the ESP keeps the record AND I have a periodic export." For most small companies, the cheapest defensible position is ESP-of-record + scheduled snapshot to your own storage. You do *not* need a real-time consent database.
 
-This document is a focused answer to the most common question developers will ask m24t.
+This document is a focused answer to the most common question developers will ask mailregime.
 
 ---
 
@@ -32,7 +32,7 @@ Three things, in order of importance:
 
 2. **Scheduled export.** Cron-job dumps the ESP's consent records (DOI confirmations, list memberships, opt-out timestamps) into your own storage (S3, R2, anywhere). Monthly is fine. The point is that the export *exists* and is provably current; the data lives nowhere else important.
 
-3. **Consent-record schema you can read without the ESP's help.** ISO/IEC TS 27560:2023 (Kantara Consent Receipt v1.1) is the de facto interop format. m24t's `AuditRecord` will be a superset of it. Use it.
+3. **Consent-record schema you can read without the ESP's help.** ISO/IEC TS 27560:2023 (Kantara Consent Receipt v1.1) is the de facto interop format. mailregime's `AuditRecord` will be a superset of it. Use it.
 
 That's it. You don't need a database, you don't need a consent-management platform, you don't need a CMS — you need a JSON file per consent in object storage and a contract with your ESP.
 
@@ -52,11 +52,11 @@ A monthly snapshot to your own bucket fixes all five.
 
 ---
 
-## What m24t will provide
+## What mailregime will provide
 
-- `m24t/audit` will export an ISO 27560-aligned `AuditRecord` shape that is portable, hashable, and serializable as a single JSON document per consent event.
-- `m24t/audit` will include a stateless serializer — there is **no built-in storage** and m24t never opens a database connection. You can store the records in R2, S3, Postgres, a flat file, your ESP, or all of the above.
-- `m24t/integrations/*` will provide ESP-specific exporters that take an ESP's native consent log and emit the canonical AuditRecord shape, so the snapshot is a one-liner regardless of which ESP you're on.
+- `mailregime/audit` will export an ISO 27560-aligned `AuditRecord` shape that is portable, hashable, and serializable as a single JSON document per consent event.
+- `mailregime/audit` will include a stateless serializer — there is **no built-in storage** and mailregime never opens a database connection. You can store the records in R2, S3, Postgres, a flat file, your ESP, or all of the above.
+- `mailregime/integrations/*` will provide ESP-specific exporters that take an ESP's native consent log and emit the canonical AuditRecord shape, so the snapshot is a one-liner regardless of which ESP you're on.
 
 The library does not require, recommend, or assume a consent database. It does recommend that whatever you store satisfies the schema.
 

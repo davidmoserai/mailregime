@@ -1,6 +1,6 @@
 # Security policy
 
-m24t is provided AS-IS under MIT with the additional disclaimer in [LICENSE](./LICENSE) and [DISCLAIMER.md](./DISCLAIMER.md). The maintainers make no security warranty and accept no liability for security defects. By using the software you accept that.
+mailregime is provided AS-IS under MIT with the additional disclaimer in [LICENSE](./LICENSE) and [DISCLAIMER.md](./DISCLAIMER.md). The maintainers make no security warranty and accept no liability for security defects. By using the software you accept that.
 
 That said: if you find a vulnerability, we'd appreciate a heads-up so we can fix it for everyone.
 
@@ -8,7 +8,7 @@ That said: if you find a vulnerability, we'd appreciate a heads-up so we can fix
 
 For non-critical issues, open a GitHub issue.
 
-For issues you believe should not be public yet, use GitHub's private security advisory: <https://github.com/davidmoserai/m24t/security/advisories/new>.
+For issues you believe should not be public yet, use GitHub's private security advisory: <https://github.com/davidmoserai/mailregime/security/advisories/new>.
 
 We make no commitment on response time, fix availability, or coordinated disclosure timelines. Reports are processed on a best-effort basis.
 

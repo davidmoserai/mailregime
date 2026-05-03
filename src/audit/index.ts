@@ -1,7 +1,7 @@
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
 // ISO/IEC TS 27560:2023-aligned consent receipts. Stateless. No I/O.
-// Storage is the caller's problem; m24t never opens a connection.
+// Storage is the caller's problem; mailregime never opens a connection.
 
 import type {
   AuditContext,
@@ -10,7 +10,7 @@ import type {
   GetEmailRulesInput,
 } from "../types.js"
 
-const SCHEMA_VERSION = "m24t/1" as const
+const SCHEMA_VERSION = "mailregime/1" as const
 const ISO27560_VERSION = "1.0" as const
 
 // Crockford-base32 time-prefix + 16 random chars. ULID-shaped — not a
@@ -81,8 +81,8 @@ export async function buildAuditRecord(
   }
 }
 
-// Strict ISO/IEC TS 27560:2023 consent-receipt projection. m24t's record
-// is a superset; this projection drops m24t-specific fields and emits
+// Strict ISO/IEC TS 27560:2023 consent-receipt projection. mailregime's record
+// is a superset; this projection drops mailregime-specific fields and emits
 // only the standard structure for interop with other tooling.
 export function serializeISO27560(record: AuditRecord): Record<string, unknown> {
   return {

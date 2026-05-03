@@ -14,14 +14,14 @@ labels: bug
 ## Reproduction
 
 ```ts
-import { getEmailRules } from "m24t"
+import { getEmailRules } from "mailregime"
 
 // minimal reproduction
 ```
 
 ## Environment
 
-- m24t version:
+- mailregime version:
 - Node / runtime (Vercel Edge, Cloudflare Workers, Deno, Bun, …):
 - TypeScript version (if applicable):
 

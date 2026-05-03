@@ -186,7 +186,7 @@ export type AuditContext = {
 }
 
 export type AuditRecord = {
-  schemaVersion: "m24t/1"
+  schemaVersion: "mailregime/1"
   iso27560Version: "1.0"
   consentId: string
   // null when the caller hasn't yet hashed/pseudonymised the subject

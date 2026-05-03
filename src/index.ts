@@ -1,6 +1,6 @@
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// m24t — country-code → email-marketing-consent rules.
+// mailregime — country-code → email-marketing-consent rules.
 // The maintainers carry zero liability for any use of this software.
 // By importing this module you agree to the terms in LICENSE.
 
@@ -60,24 +60,24 @@ export function getConfiguration(): Readonly<Configuration> {
 }
 
 // One-time advisory log so the disclaimer surfaces in environments that
-// never see the README. Suppressible via M24T_SILENCE_DISCLAIMER=1.
+// never see the README. Suppressible via MAILREGIME_SILENCE_DISCLAIMER=1.
 // Edge-safe — `process` may not exist on Cloudflare Workers / browsers.
 function emitDisclaimerOnce(): void {
   if (disclaimerWarned) return
   disclaimerWarned = true
   const proc = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process
-  if (proc?.env?.["M24T_SILENCE_DISCLAIMER"] === "1" || proc?.env?.["M24T_SILENCE_DISCLAIMER"] === "true") return
-  // Suppress in production by default. Opt back in with M24T_SHOW_DISCLAIMER=1.
-  if (proc?.env?.["NODE_ENV"] === "production" && proc?.env?.["M24T_SHOW_DISCLAIMER"] !== "1") return
+  if (proc?.env?.["MAILREGIME_SILENCE_DISCLAIMER"] === "1" || proc?.env?.["MAILREGIME_SILENCE_DISCLAIMER"] === "true") return
+  // Suppress in production by default. Opt back in with MAILREGIME_SHOW_DISCLAIMER=1.
+  if (proc?.env?.["NODE_ENV"] === "production" && proc?.env?.["MAILREGIME_SHOW_DISCLAIMER"] !== "1") return
   console.warn(
-    "[m24t] Informational only, not legal advice. Maintainers carry zero liability. See LICENSE / DISCLAIMER.md. Silence with M24T_SILENCE_DISCLAIMER=1.",
+    "[mailregime] Informational only, not legal advice. Maintainers carry zero liability. See LICENSE / DISCLAIMER.md. Silence with MAILREGIME_SILENCE_DISCLAIMER=1.",
   )
 }
 
 export class UnknownCountryError extends Error {
   constructor(country: string | null) {
     super(
-      `m24t: country "${country ?? "null"}" is not registered. Either bundle it via registerCountry(), pass a known ISO 3166-1 alpha-2 code, or set unknownCountryPolicy to "strict" or "permissive" via configure().`,
+      `mailregime: country "${country ?? "null"}" is not registered. Either bundle it via registerCountry(), pass a known ISO 3166-1 alpha-2 code, or set unknownCountryPolicy to "strict" or "permissive" via configure().`,
     )
     this.name = "UnknownCountryError"
   }
@@ -127,9 +127,9 @@ function strictFallback(country: string | null): EmailRulesData {
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
       statute: "Strict fallback (unknown country)",
-      url: "https://github.com/davidmoserai/m24t/blob/main/docs/DESIGN.md",
+      url: "https://github.com/davidmoserai/mailregime/blob/main/docs/DESIGN.md",
       jurisdiction: country ?? "UNKNOWN",
-      subRegime: "m24t-strict-fallback",
+      subRegime: "mailregime-strict-fallback",
       dataLastUpdated: CONSENT_DATA_VERSION,
       confidence: "low",
       extraterritorialReach: false,
@@ -152,7 +152,7 @@ function warnIfStale(rules: EmailRulesData, country: string): void {
   if (ageMonths < config.staleDataWarnAfterMonths) return
   // eslint-disable-next-line no-console
   console.warn(
-    `[m24t] Data for ${country} is ${ageMonths.toFixed(0)} months old (last updated ${rules.basis.dataLastUpdated}). Verify against current law.`,
+    `[mailregime] Data for ${country} is ${ageMonths.toFixed(0)} months old (last updated ${rules.basis.dataLastUpdated}). Verify against current law.`,
   )
 }
 

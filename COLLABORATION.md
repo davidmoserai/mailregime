@@ -1,8 +1,8 @@
 # Collaboration
 
-m24t is open source, AI-assisted, and not lawyer-maintained. Contributions from people who know the law are how the library gets better. This doc is the inbound path.
+mailregime is open source, AI-assisted, and not lawyer-maintained. Contributions from people who know the law are how the library gets better. This doc is the inbound path.
 
-> **Note on relationship:** Filing an issue, submitting a PR, joining a discussion, or being credited as a contributor does NOT create an attorney–client relationship between you and any user of m24t, between you and any maintainer, or between any maintainer and any user. By contributing you accept the terms in [CONTRIBUTING.md](./CONTRIBUTING.md) and [DISCLAIMER.md](./DISCLAIMER.md). You take on no liability for downstream use, and the project takes on no liability for your contribution.
+> **Note on relationship:** Filing an issue, submitting a PR, joining a discussion, or being credited as a contributor does NOT create an attorney–client relationship between you and any user of mailregime, between you and any maintainer, or between any maintainer and any user. By contributing you accept the terms in [CONTRIBUTING.md](./CONTRIBUTING.md) and [DISCLAIMER.md](./DISCLAIMER.md). You take on no liability for downstream use, and the project takes on no liability for your contribution.
 
 ## Who we want to hear from
 
@@ -16,7 +16,7 @@ m24t is open source, AI-assisted, and not lawyer-maintained. Contributions from 
 
 ### Spotted a legal data error
 
-Open a [Legal Correction issue](https://github.com/davidmoserai/m24t/issues/new?template=legal_correction.md). Include:
+Open a [Legal Correction issue](https://github.com/davidmoserai/mailregime/issues/new?template=legal_correction.md). Include:
 
 1. Country code (and region if applicable).
 2. The field you believe is wrong (e.g. `byContext.lead-magnet.canCollectForMarketing`).
@@ -28,7 +28,7 @@ A PR is even better than an issue. See [CONTRIBUTING.md](./CONTRIBUTING.md) for 
 
 ### Spotted a bug
 
-Open a [Bug Report](https://github.com/davidmoserai/m24t/issues/new?template=bug.md). Code reproduction is helpful.
+Open a [Bug Report](https://github.com/davidmoserai/mailregime/issues/new?template=bug.md). Code reproduction is helpful.
 
 ### Want to be a maintainer
 

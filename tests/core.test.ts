@@ -8,7 +8,7 @@ import {
 } from "../src/index.js"
 
 // Silence the one-time disclaimer warning during tests.
-process.env["M24T_SILENCE_DISCLAIMER"] = "1"
+process.env["MAILREGIME_SILENCE_DISCLAIMER"] = "1"
 
 test("getEmailRules — US newsletter-signup is single opt-in", () => {
   const rules = getEmailRules({
@@ -64,7 +64,7 @@ test("getEmailRules — strict policy returns conservative fallback", () => {
   assert.equal(rules.optIn, "double")
   assert.equal(rules.checkboxRequired, true)
   assert.equal(rules.basis.confidence, "low")
-  assert.equal(rules.basis.subRegime, "m24t-strict-fallback")
+  assert.equal(rules.basis.subRegime, "mailregime-strict-fallback")
   configure({ unknownCountryPolicy: "throw" })
 })
 

@@ -1,8 +1,8 @@
-# m24t
+# mailregime
 
 > The c15t for email marketing law.
 
-`m24t` (short for **marketing consent management** — `m` + 24 letters + `t`) is a country-code → email-marketing-consent-rules library.
+`mailregime` is a country-code → email-marketing-consent-rules library. Inspired by [c15t](https://c15t.com) (which solved the same problem for cookie banners), but for email opt-in / opt-out law instead.
 
 You give it where the user is, why you're collecting their email, and what your relationship with them is. It tells you whether you can email them, what kind of opt-in is required, what the audit trail must contain, and which statute it's referring to.
 
@@ -10,13 +10,13 @@ You give it where the user is, why you're collecting their email, and what your 
 
 ## ⚠️ READ FIRST — DISCLAIMER
 
-**This software is informational only. It is not legal advice.** It does not create an attorney–client relationship. The bundled data may be wrong, out of date, incomplete, or inapplicable to your facts. Use of m24t is entirely at your own risk. The maintainers carry **zero liability** for any consequence of your use, including regulatory fines, litigation, or business loss. You **must** retain qualified counsel for your specific use case.
+**This software is informational only. It is not legal advice.** It does not create an attorney–client relationship. The bundled data may be wrong, out of date, incomplete, or inapplicable to your facts. Use of mailregime is entirely at your own risk. The maintainers carry **zero liability** for any consequence of your use, including regulatory fines, litigation, or business loss. You **must** retain qualified counsel for your specific use case.
 
 **Three things you should know before installing:**
 
-1. **m24t was written largely with an AI coding assistant.** Bugs are expected. Pin a version, read diffs, verify outputs.
+1. **mailregime was written largely with an AI coding assistant.** Bugs are expected. Pin a version, read diffs, verify outputs.
 2. **No lawyer reviews this software or its data.** The maintainers are not lawyers and do not retain lawyers to vet what ships. If you are an expert in privacy law and you spot a mistake, please [open an issue or a PR](./COLLABORATION.md) — that is how the data gets better.
-3. **m24t is offline.** It runs in your process, returns data, opens no network connections, stores nothing, transmits nothing. Inputs stay with you.
+3. **mailregime is offline.** It runs in your process, returns data, opens no network connections, stores nothing, transmits nothing. Inputs stay with you.
 
 Full terms in [LICENSE](./LICENSE), [DISCLAIMER.md](./DISCLAIMER.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [COLLABORATION.md](./COLLABORATION.md). **By using this software you agree to those terms.**
 
@@ -39,13 +39,13 @@ ESP SDKs (Brevo, Mailchimp, Klaviyo, Resend) handle the *mechanics* of double op
 
 The result: every app that does email marketing across borders re-implements the same jurisdiction switch, usually wrong, usually with a TODO comment about "fix this later when we expand."
 
-`m24t` aims to be the shared, citation-backed source of truth.
+`mailregime` aims to be the shared, citation-backed source of truth.
 
 ## Planned shape
 
 ```ts
-import { getEmailRules } from "m24t"
-import { fromVercelRequest } from "m24t/adapters/vercel"
+import { getEmailRules } from "mailregime"
+import { fromVercelRequest } from "mailregime/adapters/vercel"
 
 const { country } = fromVercelRequest(request)
 
@@ -84,7 +84,7 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the full output shape, edge cases, and 
 - **Not a consent UI library.** Bring your own checkbox.
 - **Not an ESP wrapper.** Integrations are thin adapters that emit the right shape for each ESP; the ESP itself does the sending.
 - **Not a cookie banner.** That's c15t.
-- **Not a consent database.** See [docs/CONSENT_STORAGE.md](docs/CONSENT_STORAGE.md). m24t is stateless and never opens a connection to anything.
+- **Not a consent database.** See [docs/CONSENT_STORAGE.md](docs/CONSENT_STORAGE.md). mailregime is stateless and never opens a connection to anything.
 
 ## Roadmap
 

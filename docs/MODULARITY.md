@@ -1,6 +1,6 @@
 # Modularity
 
-m24t's primary design constraint is that **regulators will keep adding rules forever**. New laws, new amendments, new case law, new state-level acts. The library has to absorb that without forcing every consumer onto a new major version.
+mailregime's primary design constraint is that **regulators will keep adding rules forever**. New laws, new amendments, new case law, new state-level acts. The library has to absorb that without forcing every consumer onto a new major version.
 
 This doc lists the rules each module commits to, the boundaries between them, and the things that can change without breaking the API.
 
@@ -39,7 +39,7 @@ Each is independently extensible without touching the others.
 The library has **two version axes**:
 
 1. **Library SemVer** — code surface (function signatures, types, module paths).
-2. **`consentDataVersion`** — legal data shipped in `m24t/data`. Versioned **separately** from the library, mirrors how `tzdata` decouples from libc.
+2. **`consentDataVersion`** — legal data shipped in `mailregime/data`. Versioned **separately** from the library, mirrors how `tzdata` decouples from libc.
 
 Why two axes:
 
@@ -49,7 +49,7 @@ Why two axes:
 Apps pin the data version explicitly:
 
 ```ts
-import { configure } from "m24t"
+import { configure } from "mailregime"
 configure({ consentDataVersion: "2026-Q2" })  // pinned
 ```
 
@@ -117,12 +117,12 @@ The following can be added without breaking the API:
 
 | Change | Where | Bump |
 |---|---|---|
-| New country | `m24t/data/countries/XX.json` | data version only |
+| New country | `mailregime/data/countries/XX.json` | data version only |
 | New subRegime under existing country | same JSON | data version only |
 | Updated `dataLastUpdated` / `confidence` / `lawyerAttestation` | same record | data version only |
 | New context (e.g. `"abandoned-cart"`) | core types + per-country mapping | minor library |
-| New adapter (e.g. AWS CloudFront geo) | new package `m24t-adapter-cloudfront` | independent |
-| New ESP integration | new package `m24t-integration-X` | independent |
+| New adapter (e.g. AWS CloudFront geo) | new package `mailregime-adapter-cloudfront` | independent |
+| New ESP integration | new package `mailregime-integration-X` | independent |
 | New optional field on `EmailRules` | core types | minor library |
 | New value in a discriminated union (e.g. `optIn: "implied-30day"`) | core types | **major library** |
 
@@ -132,10 +132,10 @@ The major-bump line is deliberate: anything that changes the **shape of an exhau
 
 ## What forks and downstream layers can do
 
-Some companies will need rules m24t doesn't ship — internal legal interpretations, jurisdiction-specific carve-outs, niche regulators (Channel Islands, Faroe Islands, Vatican). m24t supports this without forking:
+Some companies will need rules mailregime doesn't ship — internal legal interpretations, jurisdiction-specific carve-outs, niche regulators (Channel Islands, Faroe Islands, Vatican). mailregime supports this without forking:
 
 ```ts
-import { getEmailRules, registerCountry } from "m24t"
+import { getEmailRules, registerCountry } from "mailregime"
 
 registerCountry({
   code: "GG",                        // Guernsey, not in default data
@@ -169,5 +169,5 @@ Be ready for these in the first 12 months post-v1:
 
 - Additional contexts as we discover real-world miscategorisations (especially around B2B and event-driven flows).
 - More granular `senderIdentity` requirements (Quebec, Catalonia, Italy Garante).
-- A `tcpa-sms` shadow output for SMS use cases — likely a sister library `m24t-sms` rather than a core change.
+- A `tcpa-sms` shadow output for SMS use cases — likely a sister library `mailregime-sms` rather than a core change.
 - A consent-receipt verification helper (`verifyAuditRecord(record, publicKey)`) once Kantara publishes a standard signing scheme.
