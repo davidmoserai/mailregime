@@ -2,10 +2,25 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// GDPR + Code de droit économique (CDE) Art. XII.13. Belgium has the
-// most language-sensitive consent regime in the EU — French, Dutch,
-// German per region under Linguistic Laws. Royal Decree 4 Apr 2003
-// gives the clearest legal-entity B2B carve-out.
+// GDPR + Code de droit économique (CDE) / Wetboek van economisch recht
+// (WER) Art. XII.13, §1: "Het gebruik van elektronische post voor reclame
+// is verboden zonder de voorafgaande, vrije, specifieke en geïnformeerde
+// toestemming van de geadresseerde" (express opt-in).
+// Source: ejustice.just.fgov.be — Wet 15/12/2013 (Boek XII WER); FOD
+// Economie consolidated text. Verified 2026-05-03.
+//
+// Soft opt-in + legal-entity carve-out: Koninklijk besluit 4 april 2003,
+// Art. 1. Existing-customer exception requires (a) contact details
+// obtained "in het kader van de verkoop van een product of een dienst",
+// (b) used "uitsluitend voor soortgelijke producten of diensten",
+// (c) opt-out at collection and in each message. Legal-entity exception:
+// "bij rechtspersonen als de elektronische contactgegevens die hij met
+// dat doel gebruikt onpersoonlijk zijn" (e.g. info@, contact@).
+// Source: ejustice.just.fgov.be — KB 04/04/2003 (cn=2003040486).
+//
+// Child age of consent: 13 — Loi 30/07/2018 relative à la protection des
+// personnes physiques à l'égard des traitements de données à caractère
+// personnel (Belgian DPA), confirmed by APD/GBA. Verified 2026-05-03.
 export const BE: CountryData = {
   code: "BE",
   regime: "GDPR",
@@ -53,8 +68,8 @@ export const BE: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "GDPR Art. 6(1)(a) + Art. 7 + Code de droit économique Art. XII.13 + Royal Decree 4 Apr 2003",
-      url: "https://www.autoriteprotectiondonnees.be/",
+      statute: "GDPR Art. 6(1)(a) + Art. 7 + Code de droit économique / WER Art. XII.13 §1 + Koninklijk besluit 4 april 2003 Art. 1 + Loi 30/07/2018 (Belgian DPA)",
+      url: "http://www.ejustice.just.fgov.be/cgi_loi/change_lg.pl?language=nl&la=N&table_name=wet&cn=2003040486",
       jurisdiction: "EU",
       subRegime: "BE-CDE",
       dataLastUpdated: "2026-05-03",

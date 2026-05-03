@@ -42,7 +42,7 @@ export const UA: CountryData = {
     requiresCallerSimilarityAssertion: false,
     impliedConsentTtlMonths: null,
     // Law 2297-VI applies to personal data of natural persons; legal-entity
-    // contact data is outside scope, but Art. 21 of Law on Advertising
+    // contact data is outside scope, but Art. 14-3 of Law on Advertising
     // still restricts unsolicited electronic advertising regardless.
     b2bExemption: {
       regime: "none",

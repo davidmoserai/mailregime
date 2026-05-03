@@ -23,7 +23,8 @@ export const AT: CountryData = {
     b2bExemption: {
       regime: "none",
       conditions: [
-        "TKG §174(3) opt-in obligation explicitly covers legal persons",
+        // TKG 2021 §174(3) uses neutral term "Empfänger" without limiting to consumers — applies to legal persons by interpretation (no B2B carve-out in statute)
+        "TKG §174(3) 'Empfänger' is neutral — opt-in obligation applies to all recipients including legal persons (no statutory B2B carve-out)",
         "TKG §174(4) similar-products soft opt-in available to business recipients on same conditions as B2C",
         "RTR ECG-Liste Robinson-list check mandatory before sending",
       ],

@@ -7,8 +7,9 @@ import type { CountryData } from "../../types.js"
 // Brexit. NOT a GDPR alias — UK divergence is widening: DUAA softens
 // some GDPR-derived obligations, recognises a list of legitimate
 // interests, and raises PECR fines to UK GDPR levels (£17.5m / 4%).
-// Charity soft opt-in added to PECR Reg 22 by DUAA, commencing early
-// 2026 — track via byRelationship: "donor" if you target charities.
+// Charity soft opt-in added to PECR Reg 22(3A) by DUAA — in force from
+// 5 February 2026 (SI 2026/82). Track via byRelationship: "donor" if
+// you target charities.
 //
 // Note: optIn: "double" is ICO best-practice / evidentiary standard
 // under UK GDPR Art. 7 accountability — single opt-in is statutorily

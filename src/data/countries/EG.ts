@@ -4,8 +4,15 @@ import type { CountryData } from "../../types.js"
 //
 // Egypt — Personal Data Protection Law No. 151 of 2020 (PDPL).
 // Regulator: Personal Data Protection Center (PDPC) under MCIT.
-// Operational status pending — executive regulations expected;
-// enforcement maturity is low but the statute is in force.
+// Executive Regulations issued 1 November 2025 by Ministerial
+// Decree 816 of 2025 (وزير الاتصالات وتكنولوجيا المعلومات);
+// PDPC is now operational. The regulations introduce a LICENSING
+// requirement for direct electronic marketing activity from the
+// PDPC, in addition to the data subject's express prior consent.
+// Quoted clause (Decree 816/2025 reporting): "اشترطت اللائحة
+// الحصول على ترخيص من المركز لمزاولة نشاط التسويق الإلكتروني،
+// وأوجبت الحصول على موافقة صريحة مسبقة من الشخص المعني بالبيانات
+// قبل توجيه الرسائل التسويقية إليه".
 //
 // Key provisions for direct electronic marketing:
 //   Art. 12 — Processing personal data requires explicit consent
@@ -31,7 +38,9 @@ import type { CountryData } from "../../types.js"
 // consent wording directed at Egyptian residents.
 //
 // Source: Law 151/2020 as published in the Official Gazette,
-//         republished by MCIT (mcit.gov.eg).
+//         republished by MCIT (mcit.gov.eg); Executive
+//         Regulations issued by Ministerial Decree 816 of 2025
+//         (effective 1 November 2025).
 export const EG: CountryData = {
   code: "EG",
   regime: "PDPL",
@@ -78,7 +87,7 @@ export const EG: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "Egypt Personal Data Protection Law No. 151 of 2020 (PDPL), Arts. 11, 12, 14, 17",
+      statute: "Egypt Personal Data Protection Law No. 151 of 2020 (PDPL), Arts. 11, 12, 14, 17; Executive Regulations issued by Ministerial Decree 816 of 2025 (effective 1 Nov 2025)",
       url: "https://mcit.gov.eg/en/Legislations",
       jurisdiction: "EG",
       subRegime: "EG-PDPL",

@@ -6,16 +6,25 @@ import type { CountryData } from "../../types.js"
 // Electronic Commerce Act (ZET) Art. 6 (unsolicited commercial
 // communications) and the Personal Data Protection Act (ZZLD).
 // Regulator: KZLD (cpdp.bg). Express prior consent required for
-// e-marketing to natural persons; soft opt-in available for existing
-// customers re: similar own products/services (ZET Art. 6(2)).
+// e-marketing to consumers (ZET чл. 6 ал. 4: "Забранява се
+// изпращането на непоискани търговски съобщения на потребители без
+// предварителното им съгласие"). Bulgaria did NOT transpose the
+// ePrivacy Art. 13(2) soft opt-in carve-out into ZET — there is no
+// statutory existing-customer / similar-products exception. For legal
+// persons, ZET чл. 6 ал. 2-3 establishes an opt-out register
+// maintained by the Commission for Consumer Protection (КЗП).
+// Source: https://exlege.bg/normi/zet (fetched 2026-05-03).
 export const BG: CountryData = {
   code: "BG",
   regime: "GDPR+ePrivacy",
   defaults: {
     canCollectForMarketing: true,
-    // ZET Art. 6(1) requires prior express consent of the recipient
-    // for unsolicited commercial e-communications.
-    // https://lex.bg/laws/ldoc/2135530547
+    // ZET чл. 6 ал. 4 (verbatim, fetched 2026-05-03):
+    // "Забранява се изпращането на непоискани търговски съобщения на
+    //  потребители без предварителното им съгласие."
+    // (Sending unsolicited commercial messages to consumers without
+    //  their prior consent is prohibited.)
+    // https://exlege.bg/normi/zet
     optIn: "express",
     checkboxRequired: true,
     // GDPR Art. 7(2) + EDPB guidance — consent must be unbundled.
@@ -29,21 +38,27 @@ export const BG: CountryData = {
     requiresCallerSimilarityAssertion: false,
     impliedConsentTtlMonths: null,
     b2bExemption: {
-      // ZET Art. 6 applies to "recipients" without distinguishing legal
-      // and natural persons in practice; KZLD treats employee mailboxes
-      // at legal persons as personal data under GDPR. Generic role
-      // addresses (info@, sales@) commonly handled under LIA.
-      regime: "gdpr-lia",
+      // ZET чл. 6 ал. 2 (verbatim, fetched 2026-05-03):
+      // "Комисията за защита на потребителите води електронен регистър
+      //  на електронните адреси на юридическите лица, които не желаят
+      //  да получават непоискани търговски съобщения, по ред, определен
+      //  с наредба на Министерския съвет."
+      // ал. 3: "Забранява се изпращането на непоискани търговски
+      //  съобщения на електронни адреси, вписани в регистъра по ал. 2."
+      // → Statutory opt-out register at КЗП (Commission for Consumer
+      //   Protection) for legal persons. Employee personal work
+      //   mailboxes remain personal data under GDPR.
+      // https://exlege.bg/normi/zet
+      regime: "publicly-disclosed",
       conditions: [
-        "ZET Art. 6 covers commercial communications generally",
-        "Role/function addresses (info@, sales@) typically under GDPR LIA",
-        "Employee personal work addresses still require GDPR basis",
+        "Legal persons may register email addresses with КЗП to refuse unsolicited commercial communications (ZET чл. 6 ал. 2)",
+        "Sending to addresses on the КЗП register is prohibited (ZET чл. 6 ал. 3)",
+        "Employee personal work addresses still require a GDPR basis",
       ],
     },
-    // KZLD guidance: consent and notices must be in clear language
-    // understandable to the data subject; Bulgarian required where
-    // the service targets the Bulgarian market.
-    // https://www.cpdp.bg/
+    // No primary-source quote located for a Bulgarian-language
+    // requirement specific to e-marketing consent; GDPR Art. 12
+    // (intelligible language) applies. Marked best-effort.
     consentLanguage: { required: ["bg"], mustMatchUserLocale: true },
     dataResidency: { storageRegion: "eu", crossBorderTransferMechanism: "scc" },
     consentRecordRetentionMonths: 36,
@@ -61,8 +76,14 @@ export const BG: CountryData = {
       representativeRequired: false,
     },
     reConsentTriggerMonths: 24,
-    // ZZLD Art. 25c — Bulgaria sets the GDPR Art. 8 digital age of
-    // consent at 14. https://lex.bg/laws/ldoc/2132268033
+    // ZZLD чл. 25в (verbatim, fetched 2026-05-03):
+    // "Обработването на данни на субект на данни - лице, ненавършило
+    //  14 години, въз основа на съгласие по смисъла на чл. 4, т. 11
+    //  от Регламент (ЕС) 2016/679 ... е законосъобразно само ако
+    //  съгласието е дадено от упражняващия родителски права родител
+    //  или от настойника на субекта на данните."
+    // → Bulgaria's GDPR Art. 8 digital age of consent = 14.
+    // https://exlege.bg/normi/zzld
     childAgeOfConsent: 14,
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
@@ -83,14 +104,10 @@ export const BG: CountryData = {
     transactional: { proofRequired: [] },
   },
   byRelationship: {
-    // ZET Art. 6(2) — soft opt-in: a trader who obtained an electronic
-    // contact from a customer in connection with a sale may use it to
-    // market its own similar products/services, with opt-out at each
-    // message and at collection.
-    "existing-customer": {
-      softOptInAvailable: true,
-      softOptInScope: "similar-products",
-      requiresCallerSimilarityAssertion: true,
-    },
+    // Bulgaria did NOT transpose ePrivacy Art. 13(2) soft opt-in into
+    // ZET. ZET чл. 6 ал. 4 requires prior consent for any unsolicited
+    // commercial email to consumers, with no statutory carve-out for
+    // existing customers / similar own products. Relationship therefore
+    // does not unlock soft opt-in. (Verified against exlege.bg 2026-05-03.)
   },
 }

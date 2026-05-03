@@ -4,14 +4,20 @@ import type { CountryData } from "../../types.js"
 //
 // Ghana Data Protection Act, 2012 (Act 843), enforced by the Data
 // Protection Commission (DPC, dataprotection.org.gh).
-// - s. 20: requires consent / lawful basis for processing personal data.
-// - s. 22: children require parental consent (minor = under 18).
-// - s. 40: direct marketing — opt-in regime. A data controller shall
-//   not use personal data for direct marketing purposes without the
-//   prior written consent of the data subject. The data subject may
-//   withdraw consent / object at any time, free of charge.
-// Because s. 40 requires prior written (express) consent, classification
-//   here is "express" opt-in. No soft opt-in carve-out exists in Act 843.
+// - s. 20: "A person shall not process personal data without the prior
+//   consent of the data subject" unless one of the listed lawful bases
+//   applies (contract, law, vital/legitimate interest, statutory duty).
+// - s. 37(1)(a): processing of personal data of "a child who is under
+//   parental control in accordance with the law" is prohibited unless
+//   processing is necessary or the data subject consents (s. 37(2)).
+//   Act 843 does not fix a numerical age; the under-18 threshold comes
+//   from Ghana's Children's Act 1998 (Act 560) and Constitution art. 28.
+// - s. 40(1): "A data controller shall not provide, use, obtain,
+//   procure or provide information related to a data subject for the
+//   purposes of direct marketing without the prior written consent of
+//   the data subject." s. 40(2) adds a standing opt-out right by
+//   written notice. Therefore classification here is "express" opt-in.
+// No soft opt-in carve-out exists in Act 843.
 export const GH: CountryData = {
   code: "GH",
   regime: "DPA-2012",
@@ -48,13 +54,15 @@ export const GH: CountryData = {
       representativeRequired: false,
     },
     reConsentTriggerMonths: 24,
-    // Act 843 s. 22 — a child is a person under 18; processing of a child's
-    // personal data requires consent of a parent or legal guardian.
+    // Act 843 s. 37(1)(a) prohibits processing data of "a child who is
+    // under parental control in accordance with the law". Act 843 does
+    // not state a numerical age; under-18 is taken from Ghana's
+    // Children's Act 1998 (Act 560) and Constitution art. 28.
     childAgeOfConsent: 18,
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording"],
     basis: {
-      statute: "Ghana Data Protection Act, 2012 (Act 843), ss. 20, 22, 40",
+      statute: "Ghana Data Protection Act, 2012 (Act 843), ss. 20, 37, 40",
       url: "https://www.dataprotection.org.gh/data-protection/data-protection-acts-2012",
       jurisdiction: "GH",
       subRegime: "GH-DPA",

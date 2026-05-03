@@ -13,7 +13,7 @@ import type { CountryData } from "../../types.js"
 // the recipient is a natural or legal person — there is NO general B2B
 // carve-out under Latvian ePrivacy. GDPR child age of consent for
 // information society services is set at 13 by the Personal Data
-// Processing Law (Fizisko personu datu apstrādes likums) §20.
+// Processing Law (Fizisko personu datu apstrādes likums) §33.
 export const LV: CountryData = {
   code: "LV",
   regime: "GDPR+ePrivacy",
@@ -63,14 +63,14 @@ export const LV: CountryData = {
       representativeRequired: false,
     },
     reConsentTriggerMonths: 24,
-    // Personal Data Processing Law §20 sets the child age of consent
+    // Personal Data Processing Law §33 sets the child age of consent
     // for information society services at 13 (Latvia exercised the
     // GDPR Art. 8(1) derogation downward from 16).
     childAgeOfConsent: 13,
     parentalVerificationRequired: false,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "GDPR (Reg. 2016/679) + Informācijas sabiedrības pakalpojumu likums §9 + Elektronisko sakaru likums + Fizisko personu datu apstrādes likums §20",
+      statute: "GDPR (Reg. 2016/679) + Informācijas sabiedrības pakalpojumu likums §9 + Elektronisko sakaru likums + Fizisko personu datu apstrādes likums §33",
       url: "https://likumi.lv/ta/id/96619-informacijas-sabiedribas-pakalpojumu-likums",
       jurisdiction: "LV",
       subRegime: "LV-EPRIVACY",

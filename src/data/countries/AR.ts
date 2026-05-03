@@ -25,12 +25,16 @@ import type { CountryData } from "../../types.js"
 // 18; AAIP guidance ("Guía de buenas prácticas") suggests parental
 // consent for children under 13 by analogy with international norms.
 //
-// Pending reform: A new Personal Data Protection bill (Proyecto de Ley
-// de Protección de Datos Personales, modeled on the GDPR) was
-// reintroduced by the Executive in 2023 and remains under
-// parliamentary review as of 2026-05-03. It would replace Ley 25.326
-// and tighten consent rules — verify current status before relying on
-// the old regime for new launches.
+// Pending reform: The AAIP's 2023 Executive bill (Proyecto de Ley de
+// Protección de Datos Personales, GDPR-modeled) lost parliamentary
+// status in 2025. As of 2026-05-03 a new bill — Proyecto 1625-D-2026
+// (Diputado Martín Yeza, modernización Ley 25.326) — is under debate
+// in the Cámara de Diputados, alongside parallel proposals from
+// Diputado Pablo Carro and Senador Martín Doñate. Ley 25.326 remains
+// the operative regime until any of these is enacted. Verify current
+// status before relying on the old regime for new launches.
+// See: https://www.argentina.gob.ar/aaip/datospersonales/proyecto-ley-datos-personales
+// (fetched 2026-05-03)
 export const AR: CountryData = {
   code: "AR",
   regime: "LEY-25326",
@@ -76,9 +80,13 @@ export const AR: CountryData = {
     },
     preferenceCenter: { granularityRequired: "purpose", perEmailUnsubAlsoRequired: true },
     senderIdentity: {
-      // Art. 27(3) — every marketing contact must identify the
-      // sender (responsable) and disclose the right to opt out
-      // ("retiro o bloqueo total o parcial").
+      // Decreto 1558/2001 Art. 27: "En toda comunicación con fines
+      // de publicidad que se realice por correo, teléfono, correo
+      // electrónico, Internet u otro medio a distancia a conocer,
+      // se deberá indicar, en forma expresa y destacada, la
+      // posibilidad del titular del dato de solicitar el retiro
+      // o bloqueo." The name of the responsable/usuario del banco
+      // de datos must be disclosed "a pedido del interesado".
       physicalAddressRequired: true,
       legalEntityNameRequired: true,
       representativeRequired: false,

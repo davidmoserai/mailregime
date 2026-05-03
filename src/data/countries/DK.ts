@@ -42,7 +42,7 @@ export const DK: CountryData = {
       representativeRequired: true,
     },
     reConsentTriggerMonths: 24,
-    childAgeOfConsent: 13,
+    childAgeOfConsent: 15,
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {

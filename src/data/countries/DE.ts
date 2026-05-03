@@ -2,7 +2,10 @@ import type { CountryData } from "../../types.js"
 
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
-// GDPR + UWG §7 Abs. 2 Nr. 3 (Gesetz gegen den unlauteren Wettbewerb).
+// GDPR + UWG §7 Abs. 2 Nr. 2 (Gesetz gegen den unlauteren Wettbewerb) —
+// "Werbung unter Verwendung ... elektronischer Post, ohne dass eine
+// vorherige ausdrückliche Einwilligung des Adressaten vorliegt".
+// Bestandskundenausnahme in §7 Abs. 3 (4 kumulative Voraussetzungen).
 // Germany applies a stricter "Bestandskundenausnahme" — soft opt-in is
 // available only for similar products, the customer must have been told
 // about marketing use at point of sale, and the unsubscribe link must
@@ -56,7 +59,7 @@ export const DE: CountryData = {
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "GDPR Art. 6(1)(a) + Art. 7 + UWG §7 Abs. 2 Nr. 3",
+      statute: "GDPR Art. 6(1)(a) + Art. 7 + UWG §7 Abs. 2 Nr. 2 (+ Abs. 3 soft opt-in)",
       url: "https://www.gesetze-im-internet.de/uwg_2004/__7.html",
       jurisdiction: "EU",
       subRegime: "DE-UWG",

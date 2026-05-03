@@ -13,10 +13,13 @@ import type { CountryData } from "../../types.js"
 // NDPA s. 36: data subjects have an unconditional right to object to
 // processing for direct marketing at any time, free of charge — opt-out
 // must be available at every contact.
-// NDPA s. 31: a child is anyone under 18, but processing of a child's
-// personal data requires parental/guardian consent only where the child
-// is under 13 (matches GDPR Art. 8). Above 13, the child can consent
-// directly subject to age-appropriate safeguards.
+// NDPA s. 31: where the data subject is a child (defined as under 18,
+// aligning with Nigeria's Child Rights Act), the controller must obtain
+// consent from the parent or legal guardian. This raised the threshold
+// from the previous NDPR 2019 (which used 13) — under NDPA 2023 there is
+// no direct-consent window between 13 and 18. FPF analysis confirms:
+// "A 'child' is defined as a person under 18 years old, aligning with
+// Nigeria's Child Rights Act rather than the previous 13-year threshold."
 // NDPA covers natural persons only — pure B2B (role-based corporate
 // addresses, no identifiable individual) sits outside scope, but most
 // named-person business emails remain in scope.
@@ -59,8 +62,8 @@ export const NG: CountryData = {
       representativeRequired: true,
     },
     reConsentTriggerMonths: 24,
-    // NDPA s. 31: parental consent required only for children under 13.
-    childAgeOfConsent: 13,
+    // NDPA s. 31: parental consent required for all data subjects under 18.
+    childAgeOfConsent: 18,
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {

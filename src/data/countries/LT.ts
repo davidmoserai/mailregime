@@ -21,7 +21,7 @@ import type { CountryData } from "../../types.js"
 // Generic role addresses of legal persons are treated lighter in VDAI
 // guidance, hence "function-address" tag with strict conditions.
 //
-// Child age of consent under ADTAĮ Art. 2(1): 14 years (Lithuania
+// Child age of consent under ADTAĮ Art. 6(1): 14 years (Lithuania
 // used the GDPR Art. 8(1) Member-State derogation to lower from 16).
 export const LT: CountryData = {
   code: "LT",
@@ -67,7 +67,7 @@ export const LT: CountryData = {
       representativeRequired: false,
     },
     reConsentTriggerMonths: 24,
-    // ADTAĮ Art. 2(1) sets the GDPR Art. 8 information-society-services
+    // ADTAĮ Art. 6(1) sets the GDPR Art. 8 information-society-services
     // age of consent at 14 (Lithuania exercised the Member-State option).
     childAgeOfConsent: 14,
     parentalVerificationRequired: false,

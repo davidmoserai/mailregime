@@ -66,7 +66,7 @@ export const SI: CountryData = {
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
       statute: "Zakon o elektronskih komunikacijah (ZEKom-2) Art. 226 + Zakon o varstvu osebnih podatkov (ZVOP-2) + Regulation (EU) 2016/679 (GDPR)",
-      url: "https://www.ip-rs.si/varstvo-osebnih-podatkov/obveznosti-upravljavcev/neposredno-trzenje",
+      url: "https://www.ip-rs.si/varstvo-osebnih-podatkov/pravice-posameznika/neposredno-trzenje",
       jurisdiction: "SI",
       subRegime: "SI-ZEKom",
       dataLastUpdated: "2026-05-03",
