@@ -1,6 +1,6 @@
 {
   "name": "mailregime",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Country code → email-marketing-consent rules. Informational only, not legal advice.",
   "type": "module",
   "main": "./dist/index.js",

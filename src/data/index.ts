@@ -1,6 +1,8 @@
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 
 import type { CountryData } from "../types.js"
+
+// Wave 1 — original 27 (Anglo, EU/Western, EEA, key APAC, LatAm, MENA, ZA).
 import { US } from "./countries/US.js"
 import { GB } from "./countries/GB.js"
 import { DE } from "./countries/DE.js"
@@ -29,16 +31,71 @@ import { AE } from "./countries/AE.js"
 import { IL } from "./countries/IL.js"
 import { ZA } from "./countries/ZA.js"
 
-// 27 countries. Roadmap: rest of EU, rest of APAC, rest of LatAm,
-// MENA + Africa expansion. See COLLABORATION.md for how to contribute
-// a country (primary-source citations required).
+// Wave 2 — rest of EU/EEA (GDPR + national ePrivacy transpositions).
+import { BG } from "./countries/BG.js"
+import { CY } from "./countries/CY.js"
+import { CZ } from "./countries/CZ.js"
+import { EE } from "./countries/EE.js"
+import { FI } from "./countries/FI.js"
+import { GR } from "./countries/GR.js"
+import { HR } from "./countries/HR.js"
+import { HU } from "./countries/HU.js"
+import { IS } from "./countries/IS.js"
+import { LI } from "./countries/LI.js"
+import { LT } from "./countries/LT.js"
+import { LU } from "./countries/LU.js"
+import { LV } from "./countries/LV.js"
+import { MT } from "./countries/MT.js"
+import { PT } from "./countries/PT.js"
+import { RO } from "./countries/RO.js"
+import { SI } from "./countries/SI.js"
+import { SK } from "./countries/SK.js"
+
+// Wave 2 — rest of APAC, LATAM, MENA, Africa, CIS.
+import { HK } from "./countries/HK.js"
+import { TW } from "./countries/TW.js"
+import { MY } from "./countries/MY.js"
+import { TH } from "./countries/TH.js"
+import { ID } from "./countries/ID.js"
+import { PH } from "./countries/PH.js"
+import { VN } from "./countries/VN.js"
+import { AR } from "./countries/AR.js"
+import { CL } from "./countries/CL.js"
+import { CO } from "./countries/CO.js"
+import { PE } from "./countries/PE.js"
+import { UY } from "./countries/UY.js"
+import { SA } from "./countries/SA.js"
+import { QA } from "./countries/QA.js"
+import { TR } from "./countries/TR.js"
+import { EG } from "./countries/EG.js"
+import { MA } from "./countries/MA.js"
+import { NG } from "./countries/NG.js"
+import { KE } from "./countries/KE.js"
+import { GH } from "./countries/GH.js"
+import { RU } from "./countries/RU.js"
+import { UA } from "./countries/UA.js"
+
+// 67 countries. See COLLABORATION.md for how to contribute a country
+// (primary-source citations required). Coverage gaps remain across
+// sub-Saharan Africa, Central Asia, the Caribbean and Oceania.
 export const BUNDLED_COUNTRIES: ReadonlyArray<CountryData> = [
+  // Original 27
   US, GB, DE, CA, AU,
   FR, IT, ES, NL, BE, IE, AT, PL, SE, DK,
   CH, NO,
   JP, KR, SG, IN, NZ,
   BR, MX,
   AE, IL, ZA,
+  // Rest of EU/EEA
+  BG, CY, CZ, EE, FI, GR, HR, HU, IS, LI, LT, LU, LV, MT, PT, RO, SI, SK,
+  // APAC
+  HK, TW, MY, TH, ID, PH, VN,
+  // LATAM
+  AR, CL, CO, PE, UY,
+  // MENA + Africa
+  SA, QA, TR, EG, MA, NG, KE, GH,
+  // CIS
+  RU, UA,
 ]
 
 // Static map for bundled countries. Apps that want tree-shaking import
