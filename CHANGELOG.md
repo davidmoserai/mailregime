@@ -4,12 +4,27 @@ All notable changes to mailregime will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Note that **0.x releases may include breaking changes in any minor version** — this is the conventional pre-1.0 contract.
 
+## [0.3.3] - 2026-05-03
+
+### Removed
+
+- **`routines/` directory** (introduced in v0.3.2) — scheduled prompts belong on the maintainer's Claude account via `/schedule`, not in the repo. Versioning the prompt twice (account + file) creates a drift risk for no benefit. Source-of-truth for the verification routine is now the maintainer's account; users with no schedule run nothing, which is fine — DISCLAIMER's "best effort, no timeliness promise" already covers it.
+
+### Changed
+
+- **DISCLAIMER.md + COLLABORATION.md** — verification cadence wording updated `typically weekly` → `typically monthly`. Honest match to the actual cadence we'll run. Email-marketing law doesn't change weekly across 27 jurisdictions; weekly verification was aspirational and would burn subscription quota for ~99% no-op runs.
+
+### Note on v0.3.2
+
+v0.3.2 shipped `routines/` as a package directory. It has zero runtime impact (no code touched the runtime library), so installs of v0.3.2 are safe to keep. v0.3.3 supersedes it cleanly.
+
+[0.3.3]: https://github.com/davidmoserai/mailregime/releases/tag/v0.3.3
+
 ## [0.3.2] - 2026-05-03
 
-### Added
+### Added (later removed in v0.3.3)
 
-- **`routines/`** — scheduled-agent prompts for the weekly jurisdiction verification promised in [DISCLAIMER.md](DISCLAIMER.md). Set up via Claude Code `/schedule` against the maintainer's subscription (no API key needed). Master prompt spawns one general-purpose subagent per bundled country in parallel batches — clean context per country, scales as more are added, isolates per-country research failures. On findings: opens a PR labelled `legal-correction`. On clean: posts a commit comment.
-- **`routines/README.md`** — setup guide + the subagent pattern explained.
+- `routines/` directory — superseded by maintaining the prompt on the Claude account directly. See v0.3.3 for the rationale.
 
 [0.3.2]: https://github.com/davidmoserai/mailregime/releases/tag/v0.3.2
 

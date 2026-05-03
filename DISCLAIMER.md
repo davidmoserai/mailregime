@@ -13,7 +13,7 @@ If any of those points is unacceptable to you, do not use this software.
 
 ## How we try to keep the data current (and why we cannot promise to)
 
-The maintainers run periodic AI-assisted research routines (typically weekly) to scan for legal changes — new statutes, regulator guidance, court rulings, amendments, repeals — and incorporate findings into the country records. These routines are best-effort and may miss developments, mis-summarise them, or apply them incorrectly. They are run by an AI agent. They are not a substitute for a lawyer.
+The maintainers run periodic AI-assisted research routines (typically monthly) to scan for legal changes — new statutes, regulator guidance, court rulings, amendments, repeals — and incorporate findings into the country records. These routines are best-effort and may miss developments, mis-summarise them, or apply them incorrectly. They are run by an AI agent. They are not a substitute for a lawyer.
 
 **No promise of timeliness.** We do not promise the data is current, will become current, or will be updated on any schedule. Country records carry a `dataLastUpdated` field — that is a fact about the file, not a guarantee about the world. A field updated yesterday can be wrong. A field two years stale can be right. Always verify against your own counsel and your own primary-source reading before relying on any output.
 

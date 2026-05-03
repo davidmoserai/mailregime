@@ -52,7 +52,7 @@ If you are a qualified lawyer in a relevant jurisdiction and you want to be name
 
 ## Maintenance cadence
 
-We run an AI-assisted research routine periodically (typically weekly) to scan for legal changes — new statutes, regulator guidance, court rulings, amendments, repeals — and incorporate findings into country records as data PRs. Findings are surfaced in commit messages with citations.
+We run an AI-assisted research routine periodically (typically monthly) to scan for legal changes — new statutes, regulator guidance, court rulings, amendments, repeals — and incorporate findings into country records as data PRs. Findings are surfaced in commit messages with citations.
 
 **This is best-effort. We promise nothing about timeliness, completeness, or correctness of the routine's output.** It is run by an AI agent and reviewed by a non-lawyer maintainer. It will miss things. It will sometimes get things wrong. The library is provided AS-IS.
 
