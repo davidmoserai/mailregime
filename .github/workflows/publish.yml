@@ -1,0 +1,36 @@
+name: Publish to npm
+
+# Triggers on a release-tag push (e.g. `git tag v0.1.1 && git push --tags`).
+# Uses npm's Trusted Publishers (OIDC) so no NPM_TOKEN secret is needed.
+# Requires one-time setup at:
+#   https://www.npmjs.com/package/mailregime/access
+#   → Trusted Publishers → Add → GitHub Actions
+#       Repository:  davidmoserai/mailregime
+#       Workflow:    publish.yml
+#       Environment: (leave blank, or "production" if you set one up)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for OIDC token (provenance + trusted publisher auth).
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Publish (provenance)
+        run: npm publish --provenance --access=public
