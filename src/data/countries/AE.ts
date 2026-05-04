@@ -57,7 +57,7 @@ export const AE: CountryData = {
       url: "https://uaelegislation.gov.ae/en/legislations/1972/download",
       jurisdiction: "AE",
       subRegime: "AE-PDPL",
-      dataLastUpdated: "2026-05-03",
+      dataLastUpdated: "2026-05-04",
       confidence: "low",
       extraterritorialReach: true,
       lawyerAttestation: null,

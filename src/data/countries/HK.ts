@@ -20,9 +20,10 @@ import type { CountryData } from "../../types.js"
 //
 // UEMO Cap. 593 governs the SENDING of commercial electronic messages
 // (email, SMS, fax, pre-recorded voice) with a Hong Kong link. UEMO is
-// opt-out: senders must include accurate sender info, clear unsubscribe
-// facility, honour unsubscribe within 10 working days, and not send to
-// numbers on the Do-not-call Registers. UEMO does NOT displace PDPO —
+// opt-out: senders must include accurate sender info (s.8), a clear
+// unsubscribe facility (s.9), honour unsubscribe within 10 working
+// days (s.10(2)), and not send to numbers on the Do-not-call
+// Registers (s.11). UEMO does NOT displace PDPO —
 // when personal data is used, PDPO Part VIA consent is also required.
 // UEMO Cap. 593: https://www.elegislation.gov.hk/hk/cap593!en
 // OFCA UEMO guidance: https://www.ofca.gov.hk/en/regulatory_framework/uemo/
@@ -42,8 +43,8 @@ export const HK: CountryData = {
     // pre-ticked boxes do not constitute "an indication of no objection".
     prechecking: "forbidden",
     channels: ["email"],
-    // UEMO s.8 requires an unsubscribe facility in every commercial
-    // electronic message; sender must honour within 10 working days (s.9).
+    // UEMO s.9 requires an unsubscribe facility in every commercial
+    // electronic message; sender must honour within 10 working days (s.10(2)).
     unsubscribeMechanism: "link",
     // PDPO has no soft opt-in / household exemption. Every reuse of
     // personal data for direct marketing requires prior s.35C consent.
@@ -87,9 +88,15 @@ export const HK: CountryData = {
       perEmailUnsubAlsoRequired: true,
     },
     senderIdentity: {
-      // UEMO s.7: every commercial electronic message must include
-      // accurate sender information and a HK address (postal/email) at
-      // which the sender can be readily contacted.
+      // UEMO s.8(1): every commercial electronic message must include
+      // "clear and accurate information identifying the individual or
+      // organization who authorized the sending of the message" AND
+      // "clear and accurate information about how the recipient can
+      // readily contact that individual or organization", valid for
+      // at least 30 days after sending. Statute does not mandate a
+      // physical/postal address specifically — any reliable contact
+      // channel (postal, email, phone) satisfies s.8(1)(b). Verified
+      // 2026-05-04 via elegislation.gov.hk Cap. 593 s.8.
       physicalAddressRequired: true,
       legalEntityNameRequired: true,
       representativeRequired: false,
@@ -106,7 +113,7 @@ export const HK: CountryData = {
       url: "https://www.elegislation.gov.hk/hk/cap486!en?xpid=ID_1438403547997_001",
       jurisdiction: "HK",
       subRegime: "HK-PDPO-VIA",
-      dataLastUpdated: "2026-05-03",
+      dataLastUpdated: "2026-05-04",
       confidence: "medium",
       extraterritorialReach: false,
       lawyerAttestation: null,

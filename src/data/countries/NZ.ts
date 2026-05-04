@@ -3,9 +3,11 @@ import type { CountryData } from "../../types.js"
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
 // Unsolicited Electronic Messages Act 2007 (UEMA) + Privacy Act 2020.
-// Express, inferred, or deemed consent all permitted. Deemed consent
-// from publicly published business addresses → most permissive B2B
-// regime in this set. Unsubscribe within 5 working days.
+// UEMA s.4 "consented to receiving" = express consent OR consent that
+// can reasonably be inferred (incl. conspicuously published business
+// addresses where message is relevant to role and no "no marketing"
+// notice accompanies the publication) — most permissive B2B regime in
+// this set. Unsubscribe takes effect 5 working days after use (s.9(2)).
 export const NZ: CountryData = {
   code: "NZ",
   regime: "UEMA",
@@ -24,7 +26,7 @@ export const NZ: CountryData = {
     b2bExemption: {
       regime: "publicly-disclosed",
       conditions: [
-        "UEMA Sched 1 cl.4 deemed consent: published business addresses, message relevant to role, no 'no marketing' notice",
+        "UEMA s.4 inferred consent: address conspicuously published in business/official capacity, message relevant to role, publication not accompanied by no-marketing notice",
       ],
     },
     consentLanguage: { required: [], mustMatchUserLocale: false },
@@ -50,7 +52,7 @@ export const NZ: CountryData = {
       url: "https://www.legislation.govt.nz/act/public/2007/0007/latest/whole.html",
       jurisdiction: "NZ",
       subRegime: "UEMA",
-      dataLastUpdated: "2026-05-03",
+      dataLastUpdated: "2026-05-04",
       confidence: "medium",
       extraterritorialReach: true,
       lawyerAttestation: null,

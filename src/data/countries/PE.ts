@@ -3,7 +3,8 @@ import type { CountryData } from "../../types.js"
 // INFORMATIONAL ONLY — NOT LEGAL ADVICE. See LICENSE and DISCLAIMER.md.
 //
 // Peru — Ley N° 29733 (Ley de Protección de Datos Personales, 2011)
-// + Reglamento (Decreto Supremo N° 003-2013-JUS).
+// + Reglamento (Decreto Supremo N° 016-2024-JUS, in force 31 March 2025;
+// replaces the prior DS 003-2013-JUS).
 // Regulator: Autoridad Nacional de Protección de Datos Personales (ANPD),
 // under the Ministerio de Justicia y Derechos Humanos (MINJUSDH).
 //
@@ -15,10 +16,10 @@ import type { CountryData } from "../../types.js"
 // - Art. 14 lists narrow exceptions to consent (publicly available data,
 //   contractual necessity, etc.) — these do NOT create a soft opt-in for
 //   cold marketing; scope is "none" for our purposes.
-// - Reglamento DS 003-2013-JUS Art. 23: minors under 14 require parental
-//   consent; minors aged 14–18 may consent themselves if they can understand
-//   the implications. We use 14 as childAgeOfConsent and require parental
-//   verification for under-14 because the statute is explicit.
+// - Reglamento DS 016-2024-JUS Arts. 22 and 25: minors under 14 require
+//   parental consent; minors aged 14–18 may consent themselves if the
+//   information is presented in language comprehensible to them. We use 14
+//   as childAgeOfConsent and require parental verification for under-14.
 // - Right to object (derecho de oposición / cancelación) — Ley 29733 Arts. 22–23
 //   — every marketing email must offer a working opt-out.
 // - Sender identity & information duty (Art. 18) require identifying the
@@ -61,17 +62,17 @@ export const PE: CountryData = {
       representativeRequired: false,
     },
     reConsentTriggerMonths: 24,
-    // Reglamento DS 003-2013-JUS Art. 23: <14 needs parental consent;
-    // 14–18 may consent themselves if capable of understanding.
+    // Reglamento DS 016-2024-JUS Arts. 22 and 25: <14 needs parental consent;
+    // 14–18 may consent themselves if the information is comprehensible.
     childAgeOfConsent: 14,
     parentalVerificationRequired: true,
     proofRequired: ["timestamp", "ip", "source", "wording", "ua"],
     basis: {
-      statute: "Ley N° 29733 (Ley de Protección de Datos Personales) + Reglamento aprobado por Decreto Supremo N° 003-2013-JUS, plus subsequent ANPD resoluciones",
+      statute: "Ley N° 29733 (Ley de Protección de Datos Personales) + Reglamento aprobado por Decreto Supremo N° 016-2024-JUS (vigente desde el 31 de marzo de 2025), plus ANPD resoluciones",
       url: "https://www.gob.pe/anpd",
       jurisdiction: "PE",
       subRegime: "PE-29733",
-      dataLastUpdated: "2026-05-03",
+      dataLastUpdated: "2026-05-04",
       confidence: "medium",
       extraterritorialReach: true,
       lawyerAttestation: null,
