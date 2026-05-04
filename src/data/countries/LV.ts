@@ -9,9 +9,12 @@ import type { CountryData } from "../../types.js"
 // exists in ISPL §9(2) for own similar products/services to existing
 // customers who were given a clear free-of-charge objection option at
 // the moment of address collection and in every message. Regulator:
-// Datu valsts inspekcija (DVI). ISPL §9 applies regardless of whether
-// the recipient is a natural or legal person — there is NO general B2B
-// carve-out under Latvian ePrivacy. GDPR child age of consent for
+// Datu valsts inspekcija (DVI). ISPL §9(6) explicitly limits the
+// §9(1)-(3) restrictions to natural persons ("attiecas uz komerciālu
+// paziņojumu sūtīšanu fiziskajām personām"), so commercial messages
+// to legal persons fall outside the ISPL ePrivacy regime — though GDPR
+// still applies whenever the recipient address is personal data
+// (e.g. firstname.lastname@company.lv). GDPR child age of consent for
 // information society services is set at 13 by the Personal Data
 // Processing Law (Fizisko personu datu apstrādes likums) §33.
 export const LV: CountryData = {
@@ -30,16 +33,18 @@ export const LV: CountryData = {
     requiresCallerSimilarityAssertion: false,
     impliedConsentTtlMonths: null,
     b2bExemption: {
-      // ISPL §9 covers commercial communications to "addressee" without
-      // distinguishing natural vs. legal persons. DVI guidance treats
-      // emails to identifiable individuals at a company (firstname.lastname@)
-      // as personal data under GDPR; only generic role addresses
-      // (info@, sales@) sit in a lighter zone.
+      // ISPL §9(6): "Šā panta pirmajā, otrajā un trešajā daļā noteiktie
+      // aizliegumi un ierobežojumi attiecas uz komerciālu paziņojumu
+      // sūtīšanu fiziskajām personām." The ePrivacy prior-consent rule
+      // therefore does NOT apply to commercial messages sent to legal
+      // persons. GDPR still applies if the address is personal data
+      // (e.g. firstname.lastname@company.lv); generic role addresses
+      // (info@, sales@) sit fully outside both regimes.
       regime: "function-address",
       conditions: [
-        "ISPL §9 requires prior consent for commercial communications regardless of recipient type",
-        "Personalised business addresses (firstname.lastname@company.lv) are personal data — full GDPR + ePrivacy applies",
-        "Generic role addresses (info@, sales@) face lighter scrutiny but are not formally exempt",
+        "ISPL §9(6) limits the §9(1)-(3) prior-consent rule to natural persons; legal persons are outside the ePrivacy regime",
+        "Personalised business addresses (firstname.lastname@company.lv) remain personal data under GDPR — lawful basis still required",
+        "Generic role addresses (info@, sales@) fall outside both ISPL §9 and GDPR personal-data scope",
       ],
     },
     consentLanguage: {
@@ -74,7 +79,7 @@ export const LV: CountryData = {
       url: "https://likumi.lv/ta/id/96619-informacijas-sabiedribas-pakalpojumu-likums",
       jurisdiction: "LV",
       subRegime: "LV-EPRIVACY",
-      dataLastUpdated: "2026-05-03",
+      dataLastUpdated: "2026-05-04",
       confidence: "medium",
       extraterritorialReach: true,
       lawyerAttestation: null,

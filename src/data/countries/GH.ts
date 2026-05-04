@@ -66,7 +66,7 @@ export const GH: CountryData = {
       url: "https://www.dataprotection.org.gh/data-protection/data-protection-acts-2012",
       jurisdiction: "GH",
       subRegime: "GH-DPA",
-      dataLastUpdated: "2026-05-03",
+      dataLastUpdated: "2026-05-04",
       confidence: "medium",
       extraterritorialReach: true,
       lawyerAttestation: null,
