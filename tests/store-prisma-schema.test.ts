@@ -5,7 +5,7 @@
 //
 // This is the codegen flow downstream consumers use:
 //   1. install mailregime
-//   2. run `factory.client(prismaAdapter(prisma, ...)).generateSchema('1.0.0', 'prisma')`
+//   2. run `factory.client(prismaAdapter({ prisma, provider })).generateSchema('1.0.0', 'prisma')`
 //   3. paste the output into prisma/schema.prisma
 //   4. `prisma migrate dev`
 
@@ -17,7 +17,7 @@ import { factory } from "../src/store/store.ts"
 test("Prisma path: schema generation emits the canonical table + columns", () => {
   // A stub PrismaClient — generateSchema doesn't read it.
   const stub = {} as never
-  const db = factory.client(prismaAdapter(stub, { provider: "postgresql" }))
+  const db = factory.client(prismaAdapter({ prisma: stub as never, provider: "postgresql" }))
 
   const generated = db.generateSchema("1.0.0", "prisma")
   const code = generated.code

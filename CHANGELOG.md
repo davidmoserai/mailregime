@@ -34,7 +34,7 @@ import { prismaAdapter } from "mailregime/store/adapters/prisma"
 import { prisma } from "@/lib/prisma"
 
 const store = consentStore({
-  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  database: prismaAdapter({ prisma, provider: "postgresql" }),
 })
 ```
 

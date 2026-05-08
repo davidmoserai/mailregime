@@ -63,7 +63,7 @@ import { factory } from "mailregime/store"
 import { prismaAdapter } from "mailregime/store/adapters/prisma"
 //   or: drizzleAdapter / kyselyAdapter / typeormAdapter / mongoAdapter
 
-const db = factory.client(prismaAdapter({} as never, { provider: "postgresql" }))
+const db = factory.client(prismaAdapter({ prisma: {} as never, provider: "postgresql" }))
 console.log(db.generateSchema("1.0.0", "prisma").code)
 ```
 
@@ -78,7 +78,7 @@ import { prismaAdapter } from "mailregime/store/adapters/prisma"
 import { prisma } from "@/lib/prisma" // your existing Prisma client
 
 const store = consentStore({
-  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  database: prismaAdapter({ prisma, provider: "postgresql" }),
 })
 
 const rules  = getEmailRules({ country, context: "newsletter-signup", relationship: "none" })
