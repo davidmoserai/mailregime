@@ -10,7 +10,15 @@
 import { fumadb, type FumaDB } from "fumadb"
 import type { AuditRecord, EmailRulesData } from "../types.js"
 import { v1 } from "./schema.js"
-import { addMonths } from "./index.js"
+
+// Add `months` to a date in UTC. Month-end rollover follows JS rules
+// (Jan 31 + 1mo → Mar 3 because Feb 31 doesn't exist) — be aware when
+// reading deleteAfter values.
+function addMonths(date: Date, months: number): Date {
+  const out = new Date(date.getTime())
+  out.setUTCMonth(out.getUTCMonth() + months)
+  return out
+}
 
 // Apply the canonical SQL table name explicitly so the library matches
 // the schema shipped in earlier versions (`mailregime_consent_receipts`)
@@ -20,7 +28,11 @@ export const factory = fumadb({
   namespace: "mailregime",
   schemas: [v1],
 }).names({
-  consentReceipt: { sql: "mailregime_consent_receipts" },
+  consentReceipt: {
+    sql: "mailregime_consent_receipts",
+    prisma: "ConsentReceipt",
+    drizzle: "consentReceipts",
+  },
 })
 
 /**
@@ -28,7 +40,11 @@ export const factory = fumadb({
  * usually don't need to reference this directly — they pass the result
  * to `new ConsentStore(...)`.
  */
-export type FumaDBClient = FumaDB<[typeof v1]>
+export type FumaDBClient = FumaDB<typeof factory extends {
+  client: (a: never) => FumaDB<infer S>
+}
+  ? S
+  : never>
 
 const TABLE = "consentReceipt" as const
 const VERSION = "1.0.0" as const
@@ -95,6 +111,25 @@ function fromRow(row: ConsentReceiptRow): AuditRecord {
 }
 
 export type SweepResult = { deleted: number }
+
+/**
+ * Ergonomic top-level constructor matching @c15t/backend's
+ * `c15t({database: adapter})` shape.
+ *
+ *   import { consentStore } from "mailregime/store"
+ *   import { prismaAdapter } from "mailregime/store/adapters/prisma"
+ *
+ *   const store = consentStore({
+ *     database: prismaAdapter(prismaClient, { provider: "postgresql" }),
+ *   })
+ *
+ *   await store.save(record, rules)
+ */
+export function consentStore(opts: {
+  database: Parameters<typeof factory.client>[0]
+}): ConsentStore {
+  return new ConsentStore(factory.client(opts.database))
+}
 
 /**
  * Domain wrapper. All methods are awaitable; none open a connection;

@@ -1,7 +1,7 @@
 {
   "name": "mailregime",
   "version": "0.4.1",
-  "description": "Country code → email-marketing-consent rules. Informational only, not legal advice.",
+  "description": "Country code \u2192 email-marketing-consent rules. Informational only, not legal advice.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -42,12 +42,11 @@
       "import": "./dist/store/index.js",
       "default": "./dist/store/index.js"
     },
-    "./store/postgres": {
-      "types": "./dist/store/postgres.d.ts",
-      "import": "./dist/store/postgres.js",
-      "default": "./dist/store/postgres.js"
+    "./store/adapters/*": {
+      "types": "./dist/store/adapters/*.d.ts",
+      "import": "./dist/store/adapters/*.js",
+      "default": "./dist/store/adapters/*.js"
     },
-    "./schemas/*": "./schemas/*",
     "./audit": {
       "types": "./dist/audit/index.d.ts",
       "import": "./dist/audit/index.js",
@@ -61,7 +60,6 @@
   },
   "files": [
     "dist",
-    "schemas",
     "README.md",
     "LICENSE",
     "DISCLAIMER.md",
@@ -72,9 +70,6 @@
     "CHANGELOG.md",
     "llms.txt"
   ],
-  "bin": {
-    "mailregime": "./dist/bin/cli.js"
-  },
   "scripts": {
     "build": "rm -rf dist && tsc",
     "test": "node --test --import tsx tests/*.test.ts",
@@ -108,17 +103,11 @@
   "engines": {
     "node": ">=20"
   },
-  "dependencies": {
-    "@clack/prompts": "^0.7.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
-    "fumadb": "^0.2.2",
-    "postgres": "^3.4.0"
+    "fumadb": "^0.2.2"
   },
   "peerDependenciesMeta": {
-    "postgres": {
-      "optional": true
-    },
     "fumadb": {
       "optional": true
     }
@@ -129,7 +118,6 @@
     "better-sqlite3": "^12.9.0",
     "fumadb": "^0.2.2",
     "kysely": "^0.28.17",
-    "postgres": "^3.4.0",
     "tsx": "^4.7.0",
     "typescript": "^5.4.0"
   },
