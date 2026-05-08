@@ -79,8 +79,58 @@ export type PostgresStoreOptions = {
   poolSize?: number
   /** Set to your own postgres.js client to skip internal pool creation. */
   client?: unknown
+  /**
+   * TLS / SSL setting passed to postgres.js. Most managed-Postgres
+   * providers (Supabase, Neon, Render, Railway, Heroku) reject plain
+   * connections — set this to `"require"` (or pass an object with CA
+   * pinning).
+   *
+   * If unset, mailregime auto-detects common managed-Postgres hosts
+   * (*.supabase.co, *.supabase.com, *.pooler.supabase.com, *.neon.tech,
+   * *.render.com, *.railway.app) and defaults to `"require"`. Override
+   * by passing an explicit value (including `false` to disable).
+   */
+  ssl?: "require" | "prefer" | "verify-full" | boolean | object
 }
 
+const MANAGED_HOST_PATTERNS = [
+  /\.supabase\.co$/i,
+  /\.supabase\.com$/i,
+  /\.pooler\.supabase\.com$/i,
+  /\.neon\.tech$/i,
+  /\.render\.com$/i,
+  /\.railway\.app$/i,
+]
+
+function autodetectSsl(connectionString: string): "require" | undefined {
+  try {
+    const u = new URL(connectionString)
+    if (u.searchParams.get("sslmode")) return undefined // user already specified
+    if (MANAGED_HOST_PATTERNS.some((p) => p.test(u.hostname))) return "require"
+  } catch {
+    // Malformed URL; let postgres.js produce its native error.
+  }
+  return undefined
+}
+
+/**
+ * @deprecated Use `ConsentStore` from `mailregime/store` with a fumadb
+ * adapter (prisma / drizzle / kysely / typeorm / mongodb). PostgresStore
+ * forces mailregime to own connection-string parsing, SSL config, pool
+ * sizing, and migration locking — duplicate work that ORMs already do
+ * better. The new `ConsentStore` takes any fumadb-configured client and
+ * never opens its own socket. PostgresStore will be removed in v0.6.0.
+ *
+ * Migration:
+ *   - Prisma:   `new ConsentStore(factory.client(prismaAdapter(prisma, { provider: 'postgresql' })))`
+ *   - Drizzle:  `new ConsentStore(factory.client(drizzleAdapter(db, { provider: 'postgresql' })))`
+ *   - Kysely:   `new ConsentStore(factory.client(kyselyAdapter({ db, provider: 'postgresql' })))`
+ *
+ * Existing `mailregime_consent_receipts` tables are compatible — the
+ * fumadb schema preserves the same SQL column names. Ship code that
+ * uses `ConsentStore`, deploy, then optionally remove the old
+ * PostgresStore call sites.
+ */
 export class PostgresStore {
   // The `postgres` peer dep is loaded lazily on first instantiation,
   // not at import time, so users importing types still don't pull
@@ -91,10 +141,12 @@ export class PostgresStore {
     if (opts.client) {
       this.sqlPromise = Promise.resolve(opts.client as SqlClient)
     } else {
+      const ssl = opts.ssl !== undefined ? opts.ssl : autodetectSsl(opts.connectionString)
       this.sqlPromise = importPostgres().then(
         (mod) =>
           mod.default(opts.connectionString, {
             max: opts.poolSize ?? 10,
+            ...(ssl !== undefined ? { ssl } : {}),
           }) as SqlClient,
       )
     }
@@ -258,10 +310,10 @@ export class PostgresStore {
 }
 
 // Lazy-load the optional peer dep with a clear error if it's missing.
-async function importPostgres(): Promise<{ default: (connectionString: string, opts: { max: number }) => SqlClient }> {
+async function importPostgres(): Promise<{ default: (connectionString: string, opts: { max: number; ssl?: unknown }) => SqlClient }> {
   try {
     return (await import("postgres")) as unknown as {
-      default: (connectionString: string, opts: { max: number }) => SqlClient
+      default: (connectionString: string, opts: { max: number; ssl?: unknown }) => SqlClient
     }
   } catch {
     throw new Error(

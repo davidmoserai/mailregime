@@ -97,7 +97,7 @@ export function fromRow(row: ConsentReceiptRow): AuditRecord {
 // boundaries — be aware when reading delete_after values, and consult
 // your own counsel if your retention regime requires day-precise
 // expiry.
-function addMonths(date: Date, months: number): Date {
+export function addMonths(date: Date, months: number): Date {
   const out = new Date(date.getTime())
   out.setUTCMonth(out.getUTCMonth() + months)
   return out
@@ -106,3 +106,10 @@ function addMonths(date: Date, months: number): Date {
 function parseOptDate(s: string | null | undefined): Date | null {
   return s ? new Date(s) : null
 }
+
+// Public API — fumadb-based ConsentStore, schema, and factory.
+// Adapters (prismaAdapter, drizzleAdapter, kyselyAdapter, etc.) are
+// imported by consumers directly from `fumadb/adapters/<orm>`.
+export { ConsentStore, factory } from "./store.js"
+export type { FumaDBClient, SweepResult } from "./store.js"
+export { v1 as schemaV1 } from "./schema.js"

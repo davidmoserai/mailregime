@@ -112,15 +112,23 @@
     "@clack/prompts": "^0.7.0"
   },
   "peerDependencies": {
+    "fumadb": "^0.2.2",
     "postgres": "^3.4.0"
   },
   "peerDependenciesMeta": {
     "postgres": {
       "optional": true
+    },
+    "fumadb": {
+      "optional": true
     }
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.0.0",
+    "better-sqlite3": "^12.9.0",
+    "fumadb": "^0.2.2",
+    "kysely": "^0.28.17",
     "postgres": "^3.4.0",
     "tsx": "^4.7.0",
     "typescript": "^5.4.0"
