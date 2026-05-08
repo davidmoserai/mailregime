@@ -4,6 +4,44 @@ All notable changes to mailregime will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Note that **0.x releases may include breaking changes in any minor version** — this is the conventional pre-1.0 contract.
 
+## [0.5.0] - 2026-05-08
+
+### Breaking
+
+- **Storage layer rebuilt on [fumadb](https://www.npmjs.com/package/fumadb).** Same external pattern as `@c15t/backend` — the user passes their own ORM client (Prisma, Drizzle, Kysely, TypeORM, MongoDB) and mailregime wraps it instead of opening its own connection. Eliminates an entire class of bugs around SSL, pool sizing, and migration locking that managed-Postgres providers (Supabase, Neon, etc.) were exposing.
+- **`mailregime/store/postgres` (`PostgresStore`) removed.** Replaced by `consentStore({ database: <fumadb adapter> })` from `mailregime/store`.
+- **`npx mailregime` CLI removed.** The `init` and `migrate` subcommands are obsolete — users now generate per-ORM schema via `factory.client(<adapter>(...)).generateSchema('1.0.0', '<orm>')` and run their ORM's native migrate.
+- **`schemas/` directory removed** from the package. fumadb generates per-ORM schemas from the canonical schema in `src/store/schema.ts`.
+- **`postgres` peer dep removed.** The new `fumadb` peer dep is optional — only loaded when you import from `mailregime/store`.
+- **`@clack/prompts` runtime dep removed.** Was only used by the CLI.
+- The SQL table name (`mailregime_consent_receipts`) and column shape are unchanged. **No data migration required** for users coming from `v0.4.x`.
+
+### Added
+
+- **`mailregime/store`** — `consentStore({ database })`, `ConsentStore`, `factory`, `schemaV1`. Domain methods: `save / findBySubject / withdraw / purgeOnWithdrawal / sweep / migrate`.
+- **`mailregime/store/adapters/<orm>`** — re-exports of fumadb's adapters for discoverability: `prisma`, `drizzle`, `kysely`, `typeorm`, `mongodb`. Identical to importing `from "fumadb/adapters/<orm>"` directly.
+
+### Migration from v0.4.x
+
+```ts
+// Before
+import { PostgresStore } from "mailregime/store/postgres"
+const store = new PostgresStore({ connectionString: process.env.DATABASE_URL! })
+
+// After
+import { consentStore } from "mailregime/store"
+import { prismaAdapter } from "mailregime/store/adapters/prisma"
+import { prisma } from "@/lib/prisma"
+
+const store = consentStore({
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
+})
+```
+
+The save / find / withdraw / sweep surface is unchanged.
+
+[0.5.0]: https://github.com/davidmoserai/mailregime/releases/tag/v0.5.0
+
 ## [0.3.3] - 2026-05-03
 
 ### Removed

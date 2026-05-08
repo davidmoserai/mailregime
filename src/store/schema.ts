@@ -6,8 +6,8 @@
 // rather than mailregime opening its own socket.
 //
 // Logical column names are camelCase. SQL column names are snake_case
-// (matches the original schemas/postgres/0001_init.sql so PostgresStore
-// users can migrate without renaming columns).
+// and the table maps to `mailregime_consent_receipts` so installations
+// that previously created the table by hand keep working untouched.
 
 import { column, idColumn, schema, table } from "fumadb/schema"
 

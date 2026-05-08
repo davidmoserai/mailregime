@@ -24,7 +24,7 @@ Full terms in [LICENSE](./LICENSE), [DISCLAIMER.md](./DISCLAIMER.md), [CONTRIBUT
 
 ## Status
 
-`v0.3.0` — early. 27 countries bundled + self-host CLI for consent-receipt storage. Public API may change in any minor version (standard 0.x contract). Pin a version, read diffs.
+`v0.5.0` — 67 countries bundled. Storage layer rebuilt on top of [`fumadb`](https://www.npmjs.com/package/fumadb) so you bring your own ORM client (Prisma, Drizzle, Kysely, TypeORM, MongoDB). The bundled `PostgresStore` and `npx mailregime` CLI shipped in `v0.4.x` were removed — see the migration note below. Public API may change in any minor version (standard 0.x contract). Pin a version, read diffs.
 
 - [docs/DESIGN.md](docs/DESIGN.md) — full API, decision matrix, edge cases, architecture.
 - [docs/CONSENT_STORAGE.md](docs/CONSENT_STORAGE.md) — do I need a consent database? (short answer: no, but).
@@ -44,20 +44,42 @@ Zero runtime dependencies for the rules engine. ESM only. Edge-runtime safe.
 
 ## Self-host audit trail (optional)
 
-If you want mailregime to handle consent-receipt storage for you (still in **your** database — we never host data):
+If you want mailregime to handle consent-receipt storage for you (still in **your** database — we never host data), you bring your own ORM client and mailregime wraps it. Same pattern as [`@c15t/backend`](https://www.npmjs.com/package/@c15t/backend); under the hood both libraries use [fumadb](https://www.npmjs.com/package/fumadb) to translate one schema into per-ORM queries, so users get c15t-style "drop in your existing client and it just works" UX.
+
+### 1. Install peer deps
 
 ```bash
-# 1. Install the postgres peer dep (one-time)
-npm install postgres
+# core + the fumadb runtime that the storage layer is built on
+npm install mailregime fumadb
+```
 
-# 2. Initialise schema in your DB (interactive)
-npx mailregime init
+### 2. Generate the schema for your ORM
 
-# 3. Use it in your route handler
+The shape mailregime expects is exposed via the standard fumadb codegen flow. Pick the adapter for your stack and run once:
+
+```ts
+// scripts/print-mailregime-schema.ts
+import { factory } from "mailregime/store"
+import { prismaAdapter } from "mailregime/store/adapters/prisma"
+//   or: drizzleAdapter / kyselyAdapter / typeormAdapter / mongoAdapter
+
+const db = factory.client(prismaAdapter({} as never, { provider: "postgresql" }))
+console.log(db.generateSchema("1.0.0", "prisma").code)
+```
+
+Run it (`tsx scripts/print-mailregime-schema.ts`) and paste the output into your `prisma/schema.prisma` (or `drizzle/schema.ts`, etc.). Then run your ORM's migration tool — `prisma migrate dev`, `drizzle-kit push`, etc. The canonical SQL table name is `mailregime_consent_receipts`; if you applied an older mailregime SQL migration, the new schema is identical and there is nothing to migrate.
+
+### 3. Use it in your route handler
+
+```ts
 import { getEmailRules } from "mailregime"
-import { PostgresStore } from "mailregime/store/postgres"
+import { consentStore } from "mailregime/store"
+import { prismaAdapter } from "mailregime/store/adapters/prisma"
+import { prisma } from "@/lib/prisma" // your existing Prisma client
 
-const store = new PostgresStore({ connectionString: process.env.DATABASE_URL! })
+const store = consentStore({
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
+})
 
 const rules  = getEmailRules({ country, context: "newsletter-signup", relationship: "none" })
 const record = await rules.buildAuditRecord({ ip, userAgent, sourceUrl, wording, formVersion })
@@ -70,12 +92,19 @@ const history = await store.findBySubject(userIdHash)
 await store.withdraw(consentId, "one-click-unsub")
 
 // Cron sweep — deletes receipts past their retention window
-await store.sweep()
+await store.sweep({ limit: 1000 })
 ```
 
-Drizzle / Prisma / Kysely users: paste the matching schema fragment from [`schemas/`](./schemas/) into your existing schema file and let your migration tool create the table; then use `PostgresStore` (or write the SQL yourself with `toRow(record, rules)` from `mailregime/store`).
+Don't want the storage helper? **Skip it.** Importing `mailregime` alone never touches a database; the storage layer only loads when you import from `mailregime/store`.
 
-Don't want the storage helper? **Skip it.** The library never opens a connection unless you import the store.
+### Migrating from `v0.4.x` PostgresStore
+
+`v0.4.x` shipped a `PostgresStore` that opened its own pg connection and a `npx mailregime` CLI for migrations. Both are gone in `v0.5.0`:
+
+- Replace `new PostgresStore({ connectionString })` with `consentStore({ database: <fumadb adapter> })` as shown above. The wire is now whatever your ORM client is configured against — managed-Postgres SSL just works.
+- Replace `npx mailregime init / migrate` with the codegen + your-ORM-migrate flow above.
+- Drop the `postgres` peer dep — mailregime no longer needs it.
+- The SQL table (`mailregime_consent_receipts`) and column names are unchanged. No data migration required.
 
 ## Install with an AI agent
 
@@ -168,9 +197,9 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the full output shape, edge cases, and 
 - [x] Cloudflare Workers adapter
 - [x] Static + generic-header adapters
 - [x] Tests + CI
-- [x] **27 bundled countries** — US, GB, DE, CA (incl. Quebec), AU, FR, IT, ES, NL, BE (incl. German-speaking community), IE, AT, PL, SE, DK, CH, NO, JP, KR, SG, IN, NZ, BR, MX, AE, IL, ZA
+- [x] **67 bundled countries** — full EU/EEA, Anglo, key APAC + LATAM + MENA + ZA + RU + UA. See [`src/data/countries/`](src/data/countries/).
 - [x] npm publish with verified provenance (OIDC trusted publisher)
-- [ ] Next batch (rest of EU + APAC + LatAm + MENA + Africa) as user demand surfaces — see [COLLABORATION.md](COLLABORATION.md)
+- [x] **fumadb-based storage** — bring-your-own ORM (Prisma, Drizzle, Kysely, TypeORM, MongoDB) — replaces the v0.4 bundled PostgresStore + CLI
 - [ ] Brevo integration
 - [ ] Resend integration
 

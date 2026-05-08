@@ -1,7 +1,7 @@
 {
   "name": "mailregime",
-  "version": "0.4.1",
-  "description": "Country code \u2192 email-marketing-consent rules. Informational only, not legal advice.",
+  "version": "0.5.0",
+  "description": "Country code → email-marketing-consent rules. Informational only, not legal advice.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -103,9 +103,8 @@
   "engines": {
     "node": ">=20"
   },
-  "dependencies": {},
   "peerDependencies": {
-    "fumadb": "^0.2.2"
+    "fumadb": "^0.3.0"
   },
   "peerDependenciesMeta": {
     "fumadb": {
@@ -116,12 +115,15 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.0.0",
     "better-sqlite3": "^12.9.0",
-    "fumadb": "^0.2.2",
+    "fumadb": "^0.3.0",
     "kysely": "^0.28.17",
     "tsx": "^4.7.0",
     "typescript": "^5.4.0"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "mailregime": "file:mailregime-0.5.0.tgz"
   }
 }
