@@ -122,8 +122,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "mailregime": "file:mailregime-0.5.0.tgz"
   }
 }
